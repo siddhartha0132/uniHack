@@ -1,0 +1,2 @@
+sku,description,voltage,weight_kg,temp_range,protection,memory_kb
+6ES7214-1AG40-0XB0,SIMATIC S7-1200 CPU 1214C PLC,24VDC,1.4,-20 to 55 C,IP20,100

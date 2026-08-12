@@ -1,0 +1,13 @@
+Product page — siemens.com/simatic-s7-1200
+SIMATIC S7-1200, CPU 1214C
+
+Compact PLC for small to medium automation tasks.
+Input voltage: 24V DC
+Weight: 1.2 kg
+Operating temperature: -20C to 60C
+Protection class: IP20
+Digital I/O: 14 DI / 10 DO
+Ethernet interface: yes, PROFINET supported
+Memory: 100 KB work memory
+
+Buy now or find a distributor near you.

@@ -1,0 +1,13 @@
+SIEMENS SIMATIC S7-1200 CPU 1214C
+Technical Datasheet — Document No. 6ES7214-1AG40-0XB0
+Page 24 — Technical specifications
+
+Supply voltage: rated 24 V DC, operating range 20.4 V DC to 28.8 V DC
+Digital inputs: 14 x 24 V DC
+Digital outputs: 10 x relay, 2 A
+Weight: approximately 1.35 kg (including front connectors)
+Ambient temperature during operation: -20 C to +60 C
+Degree of protection: IP20
+Work memory: 100 KB
+Communication: PROFINET, Ethernet
+Dimensions (W x H x D): 110 mm x 100 mm x 75 mm

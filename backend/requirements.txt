@@ -1,0 +1,18 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+
+# Phase 1 — File upload
+pymupdf==1.24.7
+python-multipart==0.0.12
+
+# Phase 2 — LLM extraction fallback
+httpx==0.27.2
+python-dotenv==1.0.1
+
+# Phase 3 — Persistence
+sqlalchemy==2.0.31
+alembic==1.13.2
+PyJWT==2.8.0
+PyJWT==2.8.0
+pytest==8.2.2

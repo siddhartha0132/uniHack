@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veritas — Industrial Product Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">V</span>
+    <div class="brand-text">
+      <span class="brand-name">Veritas</span>
+      <span class="brand-sub">Industrial Product Intelligence</span>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <span id="api-status" class="api-status">checking API…</span>
+    <button id="run-demo-btn" class="btn btn-primary">Run demo pipeline</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <h2>Products</h2>
+      <span class="hint">Processed through the arbitration engine</span>
+    </div>
+    <ul id="product-list" class="product-list">
+      <li class="empty-state">No products yet — run the demo pipeline.</li>
+    </ul>
+  </aside>
+
+  <section class="detail" id="detail-panel">
+    <div class="empty-detail">
+      <p class="eyebrow">01 — no product selected</p>
+      <h1>Select a product, or run the sample pipeline</h1>
+      <p class="muted">The demo dataset is one Siemens PLC SKU pulled from three genuinely disagreeing sources — a technical datasheet, a manufacturer product page, and a distributor's legacy ERP export. Watch the arbitration engine resolve it with evidence.</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
