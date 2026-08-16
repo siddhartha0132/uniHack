@@ -1,0 +1,35 @@
+# UniHack Product Enrichment Pipeline
+# Core data processing
+pandas==2.2.2
+openpyxl==3.1.5
+pyarrow==16.1.0  # for parquet
+python-docx==1.1.0
+
+# Fuzzy matching for manufacturer/brand resolution
+rapidfuzz==3.9.0
+
+# ML for classification
+scikit-learn==1.4.2
+lightgbm==4.3.0
+
+# Veritas backend dependencies (reuse)
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+sqlalchemy==2.0.31
+httpx==0.27.2
+python-dotenv==1.0.1
+pymupdf==1.24.7
+
+# NLP / extraction
+spacy==3.7.4
+regex==2024.5.15
+
+# Templating for descriptions
+jinja2==3.1.4
+
+# Evaluation
+pytest==8.2.2
+
+# Optional: for local LLM (if not using NVIDIA NIM)
+# llama-cpp-python==0.2.90

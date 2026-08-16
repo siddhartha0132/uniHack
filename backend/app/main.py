@@ -16,6 +16,8 @@ Run with:
 
 import os
 import uuid
+from datetime import datetime, timezone
+from contextlib import asynccontextmanager
 from typing import Dict, Any, List, Optional
 
 from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Form, Query
@@ -43,7 +45,6 @@ SAMPLE_DIR = os.path.join(APP_DIR, "sample_data")
 
 EXPECTED_ATTRIBUTES = [
     "supply_voltage_rated",
-    "supply_voltage",
     "weight",
     "operating_temp_range",
     "protection_rating",
@@ -51,7 +52,14 @@ EXPECTED_ATTRIBUTES = [
     "digital_inputs",
 ]
 
-app = FastAPI(title="Veritas — Industrial Product Intelligence API", version="0.2.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan: startup and shutdown."""
+    init_db()
+    yield
+    # Future: close DB pools, cleanup resources
+
+app = FastAPI(title="Veritas — Industrial Product Intelligence API", version="0.2.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,13 +70,6 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
-
-
-@app.on_event("startup")
-def on_startup():
-    """Create DB tables on first startup."""
-    init_db()
-
 
 # ─── Pydantic schemas ────────────────────────────────────────────────────────
 
@@ -139,10 +140,13 @@ def _run_pipeline(
     }
 
 
-def _save_product(record: Dict[str, Any], db: Session) -> None:
-    """Upsert a product record to the DB."""
+def _save_product(record: Dict[str, Any], db: Session, expected_version: int | None = None) -> None:
+    """Upsert a product record to the DB with optimistic locking."""
     existing = db.query(Product).filter_by(product_id=record["product_id"], tenant_id=record["tenant_id"]).first()
     if existing:
+        if expected_version is not None and existing.version != expected_version:
+            raise HTTPException(status_code=409, detail="Record modified by another user. Please refresh and retry.")
+        existing.version = (existing.version or 1) + 1
         existing.product_name       = record["product_name"]
         existing.attributes_json    = record["attributes"]
         existing.quality_json       = record["quality"]
@@ -157,7 +161,11 @@ def _save_product(record: Dict[str, Any], db: Session) -> None:
 
 def _load_product(product_id: str, tenant_id: str, db: Session) -> Optional[Dict[str, Any]]:
     row = db.query(Product).filter_by(product_id=product_id, tenant_id=tenant_id).first()
-    return row.to_dict() if row else None
+    if row:
+        d = row.to_dict()
+        d["_version"] = row.version
+        return d
+    return None
 
 
 # ─── Routes ──────────────────────────────────────────────────────────────────
@@ -242,8 +250,8 @@ def ingest_discover(req: IngestRequest, db: Session = Depends(get_db), tenant_id
     
     if not req.sources:
         discovered = discover_datasheet_for_sku(req.product_id)
-        # Convert dictionary to SourceInput
-        req.sources = [SourceInput(**discovered)]
+        # Validate and ignore extra keys
+        req.sources = [SourceInput.model_validate(discovered, strict=False)]
         
     record = _run_pipeline(req.product_name, req.product_id, req.sources, db, tenant_id)
     _save_product(record, db)
@@ -311,6 +319,8 @@ def review_attribute(product_id: str, action: ReviewAction, db: Session = Depend
     if not record:
         raise HTTPException(status_code=404, detail="Product not found.")
 
+    current_version = record.get("_version", 1)
+
     attr_record = record["attributes"].get(action.attribute)
     if not attr_record:
         raise HTTPException(status_code=404, detail="Attribute not found on this product.")
@@ -329,7 +339,9 @@ def review_attribute(product_id: str, action: ReviewAction, db: Session = Depend
     else:
         raise HTTPException(status_code=400, detail="action must be approve | edit | reject")
 
-    record["review_log"].append(action.model_dump())
+    log_entry = action.model_dump()
+    log_entry["timestamp"] = datetime.now(timezone.utc).isoformat()
+    record["review_log"].append(log_entry)
 
     # Recompute quality score
     record["quality"] = arbitration.compute_quality_score(record["attributes"], EXPECTED_ATTRIBUTES)
@@ -342,15 +354,38 @@ def review_attribute(product_id: str, action: ReviewAction, db: Session = Depend
         tenant_id=tenant_id
     )
 
-    _save_product(record, db)
+    _save_product(record, db, expected_version=current_version)
     return record
+
+
+# Synonyms/aliases so natural questions like "what's the voltage?" match "supply_voltage_rated"
+_ASK_ALIASES = {
+    "voltage": ["supply_voltage_rated", "supply_voltage"],
+    "power": ["supply_voltage_rated", "supply_voltage"],
+    "weight": ["weight"],
+    "mass": ["weight"],
+    "heavy": ["weight"],
+    "temperature": ["operating_temp_range"],
+    "temp": ["operating_temp_range"],
+    "heat": ["operating_temp_range"],
+    "ip": ["protection_rating"],
+    "protection": ["protection_rating"],
+    "ingress": ["protection_rating"],
+    "memory": ["work_memory"],
+    "ram": ["work_memory"],
+    "storage": ["work_memory"],
+    "input": ["digital_inputs"],
+    "inputs": ["digital_inputs"],
+    "di": ["digital_inputs"],
+    "digital": ["digital_inputs"],
+}
 
 
 @app.get("/api/products/{product_id}/ask")
 def ask(product_id: str, q: str, db: Session = Depends(get_db), tenant_id: str = Depends(get_current_tenant)):
     """
     Retrieval-lite Q&A over stored evidence snippets.
-    Keyword overlap ranking — stand-in for real RAG (STATUS_AND_ROADMAP.md item 1).
+    Uses alias expansion + keyword overlap — stand-in for real RAG.
     """
     record = _load_product(product_id, tenant_id, db)
     if not record:
@@ -360,28 +395,34 @@ def ask(product_id: str, q: str, db: Session = Depends(get_db), tenant_id: str =
     best_attr, best_score, best_evidence = None, 0, None
 
     for attr, data in record["attributes"].items():
+        score = 0
+        # Direct token overlap with attribute name
         attr_terms = set(attr.replace("_", " ").split())
-        overlap = len(q_terms & attr_terms)
-        if overlap > best_score:
-            best_score = overlap
+        score += len(q_terms & attr_terms)
+        # Alias expansion: check if any query word is an alias for this attribute
+        for qt in q_terms:
+            if attr in _ASK_ALIASES.get(qt, []):
+                score += 2  # aliases are strong signals
+        if score > best_score:
+            best_score = score
             best_attr = attr
             best_evidence = data
 
-    if not best_attr:
+    if not best_attr or best_score == 0 or best_evidence is None:
         return {"answer": "No matching attribute found for that question.", "evidence": []}
 
     return {
-        "answer": f"{best_attr.replace('_', ' ')}: {best_evidence['resolved_value']} {best_evidence.get('unit') or ''}".strip(),
-        "confidence": best_evidence["confidence"],
-        "reasoning": best_evidence["reasoning"],
-        "evidence": best_evidence["evidence"],
+        "answer": f"{best_attr.replace('_', ' ')}: {best_evidence.get('resolved_value')} {best_evidence.get('unit') or ''}".strip(),
+        "confidence": best_evidence.get("confidence", 0.0),
+        "reasoning": best_evidence.get("reasoning", ""),
+        "evidence": best_evidence.get("evidence", []),
     }
 
 
 @app.get("/api/products/{product_id}/export")
 def export_product(
     product_id: str,
-    format: str = Query("json", description="Export format: json | akeneo_csv"),
+    fmt: str = Query("json", alias="format", description="Export format: json | akeneo_csv"),
     db: Session = Depends(get_db),
     tenant_id: str = Depends(get_current_tenant)
 ):
@@ -395,7 +436,7 @@ def export_product(
         raise HTTPException(status_code=404, detail="Product not found.")
 
     try:
-        content_type, filename, content = exporter.export_product(record, format)
+        content_type, filename, content = exporter.export_product(record, fmt)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

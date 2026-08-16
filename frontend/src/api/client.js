@@ -23,7 +23,7 @@ export const api = {
 
   listProducts: () => request("/api/products"),
 
-  getProduct: (id) => request(`/api/products/${id}`),
+  getProduct: (id) => request(`/api/products/${encodeURIComponent(id)}`),
 
   ingest: (body) =>
     request("/api/ingest", {
@@ -43,18 +43,18 @@ export const api = {
     }),
 
   reviewAttribute: (productId, payload) =>
-    request(`/api/products/${productId}/review`, {
+    request(`/api/products/${encodeURIComponent(productId)}/review`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }),
 
   ask: (productId, q) =>
-    request(`/api/products/${productId}/ask?q=${encodeURIComponent(q)}`),
+    request(`/api/products/${encodeURIComponent(productId)}/ask?q=${encodeURIComponent(q)}`),
 
   exportProduct: (productId, format) => {
     const token = localStorage.getItem('veritas_token');
-    return fetch(`${API_BASE}/api/products/${productId}/export?format=${format}`, {
+    return fetch(`${API_BASE}/api/products/${encodeURIComponent(productId)}/export?format=${encodeURIComponent(format)}`, {
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     });
   }

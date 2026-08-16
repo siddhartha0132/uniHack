@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from app.arbitration import arbitrate, compute_quality_score, SOURCE_RELIABILITY
 
 def test_arbitration_agreed():
@@ -62,3 +66,67 @@ def test_arbitration_tolerance():
     
     resolved = arbitrate(observations_by_source)
     assert resolved["weight"]["status"] == "agreed"
+
+
+# ─── Quality score tests ─────────────────────────────────────────────────
+
+EXPECTED = ["supply_voltage_rated", "weight", "operating_temp_range",
+            "protection_rating", "work_memory", "digital_inputs"]
+
+
+def _make_attr(value, confidence, status="agreed"):
+    return {
+        "resolved_value": value,
+        "unit": "kg",
+        "confidence": confidence,
+        "status": status,
+        "reasoning": "test",
+        "evidence": [],
+    }
+
+
+def test_quality_score_full_completeness():
+    """All expected attributes present with high confidence."""
+    resolved = {attr: _make_attr(1.0, 0.95) for attr in EXPECTED}
+    q = compute_quality_score(resolved, EXPECTED)
+    assert q["completeness"] == 100.0
+    assert q["missing_attributes"] == []
+    assert q["overall_score"] > 90
+
+
+def test_quality_score_partial_missing():
+    """Only half the expected attributes present."""
+    resolved = {attr: _make_attr(1.0, 0.90) for attr in EXPECTED[:3]}
+    q = compute_quality_score(resolved, EXPECTED)
+    assert q["completeness"] == 50.0
+    assert set(q["missing_attributes"]) == set(EXPECTED[3:])
+
+
+def test_quality_score_flags_conflicts():
+    """Attributes with resolved_conflict status are counted."""
+    resolved = {
+        "weight": _make_attr(1.5, 0.70, "resolved_conflict"),
+        "supply_voltage_rated": _make_attr(24.0, 0.95, "agreed"),
+    }
+    q = compute_quality_score(resolved, EXPECTED)
+    assert q["conflicts_detected"] == 1
+
+
+def test_quality_score_needs_review_low_confidence():
+    """Attributes below 0.75 confidence are flagged for review."""
+    resolved = {
+        "weight": _make_attr(1.5, 0.50, "unresolved_conflict"),
+        "supply_voltage_rated": _make_attr(24.0, 0.95, "agreed"),
+    }
+    q = compute_quality_score(resolved, EXPECTED)
+    assert "weight" in q["needs_review"]
+    assert "supply_voltage_rated" not in q["needs_review"]
+
+
+def test_quality_score_empty():
+    """No attributes at all."""
+    q = compute_quality_score({}, EXPECTED)
+    assert q["completeness"] == 0.0
+    assert q["avg_confidence"] == 0.0
+    assert q["overall_score"] == 0.0
+    assert len(q["missing_attributes"]) == len(EXPECTED)

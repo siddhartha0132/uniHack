@@ -1,0 +1,36 @@
+# Pyrefly configuration for uniHack project
+
+python-platform = "windows"
+python-interpreter-path = "backend/.venv/Scripts/python.exe"
+
+search-path = [
+    ".",
+    "backend",
+    "backend/app",
+    "src",
+]
+
+project-excludes = [
+    "**/check_*.py",
+    "**/debug_*.py",
+    "**/test_*.py",
+    "run_pipeline.py",
+    "test_classifier.py",
+    "test_classify.py",
+    "test_lov_order.py",
+    "test_detailed_extract.py",
+    "test_regex.py",
+    "test_compound.py",
+    "test_mfr.py",
+    "check_*.py",
+    "debug_*.py",
+    "update_mfr.py",
+]
+
+ignore-missing-imports = [
+    "fitz",
+    "docx",
+    "pymupdf",
+    "weasel",
+    "spacy",
+]

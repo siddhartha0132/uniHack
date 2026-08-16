@@ -51,7 +51,7 @@ def _range_agree(r1, r2, tolerance=NUMERIC_TOLERANCE) -> bool:
 
 
 def arbitrate(observations_by_source: Dict[str, Dict[str, Any]],
-              reliability_overrides: Dict[str, float] = None) -> Dict[str, Any]:
+              reliability_overrides: Dict[str, float] | None = None) -> Dict[str, Any]:
     """
     observations_by_source: {
         "source_a": {"source_type": "datasheet", "observations": [ {...}, ... ]},

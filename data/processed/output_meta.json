@@ -1,0 +1,602 @@
+[
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 0.95,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 0.95,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 0.95,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 0.95,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.6,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 0.9,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.4,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.0,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.1,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.85,
+    "brand_confidence": 1.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.5,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.2,
+    "mfr_confidence": 0.95,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.0,
+    "mfr_confidence": 0.0,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 1.0,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 1.0,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 1.0,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 1.0,
+    "mfr_confidence": 1.0,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  },
+  {
+    "classification_confidence": 0.8,
+    "mfr_confidence": 0.9473684210526316,
+    "brand_confidence": 0.0,
+    "extraction_method": "hybrid"
+  }
+]
