@@ -28,14 +28,14 @@ Do not include any explanation or markdown — just the raw JSON array.
 def extract_with_vision(image_bytes: bytes, source_id: str, location_hint: str) -> List[Dict[str, Any]]:
     api_key = os.getenv("NVIDIA_API_KEY")
     if not api_key:
-        logger.warning("VLM fallback triggered but NVIDIA_API_KEY not set — returning mock.")
-        return _mock_response(location_hint)
+        logger.warning("VLM fallback triggered but NVIDIA_API_KEY not set — skipping.")
+        return []
 
     try:
         import httpx
     except ImportError:
-        logger.warning("httpx not installed — returning mock.")
-        return _mock_response(location_hint)
+        logger.warning("httpx not installed — VLM unavailable.")
+        return []
 
     b64_image = base64.b64encode(image_bytes).decode('utf-8')
     image_url = f"data:image/jpeg;base64,{b64_image}"
@@ -83,7 +83,7 @@ def extract_with_vision(image_bytes: bytes, source_id: str, location_hint: str) 
             valid.append({
                 "attribute": str(o["attribute"]),
                 "value": o.get("value"),
-                "value_range": o.get("value_range"),
+                "value_range": tuple(o["value_range"]) if isinstance(o.get("value_range"), list) else o.get("value_range"),
                 "unit": o.get("unit"),
                 "raw_snippet": str(o.get("raw_snippet", ""))[:120],
                 "location": str(o.get("location", location_hint)),
@@ -91,26 +91,9 @@ def extract_with_vision(image_bytes: bytes, source_id: str, location_hint: str) 
             })
         return valid
 
-    except Exception as e:
+    except (httpx.HTTPError, json.JSONDecodeError, KeyError, ValueError) as e:
         logger.warning(f"VLM extraction failed for {source_id}: {e}")
-        return _mock_response(location_hint)
-
-def _mock_response(location_hint: str):
-    return [
-        {
-            "attribute": "supply_voltage_rated",
-            "value": 24.0,
-            "unit": "V DC",
-            "raw_snippet": "[MOCK VLM OCR] INPUT: 24 VDC",
-            "location": location_hint,
-            "extracted_by": "vlm"
-        },
-        {
-            "attribute": "protection_rating",
-            "value": "IP20",
-            "unit": None,
-            "raw_snippet": "[MOCK VLM OCR] IP20",
-            "location": location_hint,
-            "extracted_by": "vlm"
-        }
-    ]
+        return []
+    except Exception as e:
+        logger.exception(f"Unexpected VLM error for {source_id}: {e}")
+        return []

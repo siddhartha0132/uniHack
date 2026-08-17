@@ -128,8 +128,8 @@ def get_learned_weights(
         CustomerReliability.customer_id == customer_id
     ).all()
 
-    weights = {}
+    weights: Dict[str, float] = {}
     for row in rows:
-        weights[row.source_type] = round(row.mean_reliability, 4)
+        weights[str(row.source_type)] = round(row.mean_reliability, 4)
 
     return weights

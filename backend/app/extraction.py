@@ -47,7 +47,7 @@ TEXT_PATTERNS = [
         "V DC",
     ),
     (
-        "supply_voltage_range",
+        "supply_voltage_rated",
         re.compile(r"(?:operating range|Operating temperature range)?\s*(\d+\.?\d*)\s*V\s*DC\s*to\s*(\d+\.?\d*)\s*V\s*DC", re.I),
         "V DC",
     ),
@@ -88,18 +88,20 @@ def extract_from_text(raw_text: str, source_id: str, default_location: str = "do
             snippet_end = min(len(raw_text), m.end() + 20)
             raw_snippet = raw_text[snippet_start:snippet_end]
 
-            if attr == "supply_voltage_range":
-                observations.append(_obs(
-                    "supply_voltage", None, unit, raw_snippet, default_location,
-                    value_range=(float(m.group(1)), float(m.group(2)))
-                ))
+            if attr == "supply_voltage_rated":
+                # Check if pattern has 2 groups (range) or 1 group (single value)
+                if m.lastindex == 2:
+                    observations.append(_obs(
+                        "supply_voltage_rated", None, unit, raw_snippet, default_location,
+                        value_range=(float(m.group(1)), float(m.group(2)))
+                    ))
+                else:
+                    observations.append(_obs("supply_voltage_rated", float(m.group(1)), unit, raw_snippet, default_location))
             elif attr == "operating_temp_range":
                 observations.append(_obs(
                     "operating_temp_range", None, unit, raw_snippet, default_location,
                     value_range=(float(m.group(1)), float(m.group(2)))
                 ))
-            elif attr == "supply_voltage_rated":
-                observations.append(_obs("supply_voltage_rated", float(m.group(1)), unit, raw_snippet, default_location))
             elif attr == "protection_rating":
                 observations.append(_obs(attr, m.group(1).upper(), unit, raw_snippet, default_location))
             elif attr in ("weight", "work_memory", "digital_inputs"):
@@ -180,7 +182,7 @@ def extract_from_pdf_bytes(pdf_bytes: bytes, source_id: str) -> List[Dict[str, A
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
 
     for page_num in range(len(doc)):
-        page = doc[page_num]
+        page: Any = doc[page_num]
         text = page.get_text("text")
         location = f"Page {page_num + 1}"
         page_obs = extract_from_text(text, source_id, default_location=location)

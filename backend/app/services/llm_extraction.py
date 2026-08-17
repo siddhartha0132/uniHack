@@ -112,7 +112,7 @@ def extract_with_llm(
             valid.append({
                 "attribute": str(o["attribute"]),
                 "value": o.get("value"),
-                "value_range": o.get("value_range"),  # list [min, max] or null
+                "value_range": tuple(o["value_range"]) if isinstance(o.get("value_range"), list) else o.get("value_range"),
                 "unit": o.get("unit"),
                 "raw_snippet": str(o.get("raw_snippet", ""))[:120],
                 "location": str(o.get("location", default_location)),

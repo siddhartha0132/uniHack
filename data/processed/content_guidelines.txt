@@ -1,0 +1,21 @@
+UNILOG INTERNAL CONTENT GUIDELINES
+Product Title Formula
+Brand + Series + MPN + Item Type + Key Attributes
+Invoice Description (max 40 chars, CAPS)
+Brand ItemType KeyAttrs
+Mobile Description (60-80 chars)
+Manufacturer Brand, ItemType, Series, MPN
+Short Description
+Brand Series MPN ItemType, Key Attrs
+Long Description
+Brand ItemType, Series, Key Specs, Material, Additional Info
+Unit of Measure Rules
+Always space between number and unit: 24 in not 24in
+Use approved abbreviations only
+Decimal to Fraction
+Convert decimal inches to fractions: 0.5 to 1/2, 50.25 to 50-1/4
+Casing Rules
+Invoice: ALL CAPS
+Mobile: Title Case
+Title: Title Case
+Short/Long: Sentence case

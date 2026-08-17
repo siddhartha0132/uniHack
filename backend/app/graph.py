@@ -7,10 +7,10 @@ that flat attribute tables can't. In production this becomes a real graph databa
 (Neo4j) so it can scale past a hand-written dict and support graph queries —
 see STATUS_AND_ROADMAP.md item 4.
 """
+from typing import Dict, List, Any, Optional
 
-from typing import Dict, List
 
-RELATIONSHIPS = {
+RELATIONSHIPS: Dict[str, Dict[str, Any]] = {
     "6ES7214-1AG40-0XB0": {
         "manufacturer": "Siemens",
         "product_family": "SIMATIC S7-1200",
@@ -27,7 +27,7 @@ RELATIONSHIPS = {
 }
 
 
-def get_related(product_id: str) -> Dict[str, List[dict]]:
+def get_related(product_id: str) -> Dict[str, Any]:
     return RELATIONSHIPS.get(product_id, {
         "manufacturer": None,
         "product_family": None,

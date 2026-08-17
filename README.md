@@ -1,86 +1,308 @@
 # Veritas — Industrial Product Intelligence, Verified
 
-A working end-to-end MVP: ingest conflicting product data from multiple sources
-(datasheet, manufacturer website, distributor ERP), automatically detect and resolve
-conflicts with full evidence trails, score data quality, and route low-confidence
-attributes to a human review queue.
-
-Read **PROBLEM_STATEMENT.md** first if you (human or AI) are new to this project — it
-explains what this is, who it's for, and why it's built the way it is.
-
-Read **STATUS_AND_ROADMAP.md** to see exactly what's implemented vs. what's stubbed
-for demo purposes vs. what's genuinely future work.
+> **End-to-end MVP:** Ingest conflicting product data from multiple sources (datasheets, manufacturer websites, distributor ERPs), automatically detect and resolve conflicts with full evidence trails, score data quality, and route low-confidence attributes to human review.
 
 ---
 
-## What's in this project
+## Quick Links
+
+| Document | Purpose |
+|----------|---------|
+| [PROBLEM_STATEMENT.md](PROBLEM_STATEMENT.md) | **Start here** — what this is, why it exists, architectural philosophy |
+| [STATUS_AND_ROADMAP.md](STATUS_AND_ROADMAP.md) | What's working, what's stubbed, what's next |
+| [docs/API.md](docs/API.md) | Complete REST API reference |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture, module internals, extension points |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Docker, Kubernetes, cloud provider quickstarts |
+| [frontend/README.md](frontend/README.md) | Frontend dashboard architecture |
+
+---
+
+## What This Project Is (and Isn't)
+
+### ✅ It IS
+- A **verification and arbitration layer** that sits upstream of your existing PIM/ERP
+- The **arbitration engine** (`backend/app/arbitration.py`) — decides which disagreeing source to trust, by how much, and shows its work
+- **Evidence-first**: every resolved value carries source, location, raw snippet, reasoning, and confidence
+- **Human-in-the-loop by default**: low-confidence attributes route to review, never silently auto-published
+- **Industrial-grade classification**: ETIM/ECLASS/UNSPSC mapping (demo scope: 2 categories)
+
+### ❌ It is NOT
+- A PIM replacement (Akeneo, Salsify, inRiver, Pimcore, Stibo own that)
+- "An AI that reads PDFs" — extraction is commodity; arbitration is the moat
+- A generic document processor — purpose-built for industrial product specs
+
+---
+
+## Repository Structure
 
 ```
 veritas/
-├── PROBLEM_STATEMENT.md      ← read this first (any AI agent picking up this repo should start here)
-├── STATUS_AND_ROADMAP.md     ← what's done, what's stubbed, what to build next
+├── PROBLEM_STATEMENT.md          ← Read first (AI agents: start here)
+├── STATUS_AND_ROADMAP.md         ← Honest status: done vs stubbed vs future
+├── README.md                     ← This file
+├── docs/
+│   ├── API.md                    ← Complete REST API reference
+│   ├── ARCHITECTURE.md           ← System design, module deep-dives
+│   └── DEPLOYMENT.md             ← Docker, K8s, cloud quickstarts
 ├── backend/
 │   ├── app/
-│   │   ├── main.py           ← FastAPI app, all endpoints
-│   │   ├── extraction.py     ← pulls attributes out of raw text/CSV sources
-│   │   ├── arbitration.py    ← THE CORE LOGIC: conflict detection + resolution + confidence scoring
-│   │   ├── classification.py ← ETIM/ECLASS/UNSPSC mapping (demo scope: 2 categories)
-│   │   ├── graph.py          ← product relationships (family/compatible/replacement)
-│   │   └── sample_data/      ← 3 genuinely conflicting sources for one real PLC SKU
+│   │   ├── main.py               ← FastAPI app, all endpoints
+│   │   ├── extraction.py         ← Pattern/LLM/Vision extraction
+│   │   ├── arbitration.py        ← CORE: conflict resolution + confidence
+│   │   ├── classification.py     ← ETIM/ECLASS/UNSPSC mapping
+│   │   ├── graph.py              ← Product relationships
+│   │   ├── export.py             ← JSON, Akeneo CSV export
+│   │   ├── learning.py           ← Bayesian reliability learning
+│   │   ├── database.py           ← SQLAlchemy + SQLite/Postgres
+│   │   ├── models.py             ← ORM models
+│   │   ├── auth.py               ← JWT auth, tenant isolation
+│   │   ├── services/
+│   │   │   ├── llm_extraction.py    ← LLM fallback for extraction
+│   │   │   ├── vision_extraction.py ← VLM for nameplate images
+│   │   │   └── discovery.py         ← Auto-datasheet discovery
+│   │   └── sample_data/          ← 3 genuinely conflicting sources for 1 PLC SKU
+│   ├── tests/
+│   │   ├── test_arbitration.py
+│   │   ├── test_arbitration_extended.py
+│   │   └── test_extraction.py
 │   └── requirements.txt
 └── frontend/
     ├── index.html
     ├── styles.css
-    └── app.js                ← vanilla JS, no build step, talks to the API
+    └── app.js                    ← Vanilla JS dashboard (no build step)
 ```
 
-## Running it
+---
 
-**Backend:**
+## Running the Project
+
+### Prerequisites
+- Python 3.11+
+- (Optional) Node.js for frontend tooling — **not required**
+
+### Backend
 ```bash
 cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+
+# Optional: configure environment
+cp .env.example .env  # edit if needed
+
+# Run
 uvicorn app.main:app --reload --port 8000
 ```
 
-**Frontend:** just open `frontend/index.html` directly in a browser (it calls
-`http://127.0.0.1:8000` by default — see the `VERITAS_API_BASE` variable at the top
-of `app.js` if you need to point it elsewhere), or serve it with any static server:
+### Frontend
 ```bash
 cd frontend
-python3 -m http.server 5500
+# Option 1: Open directly (may have CORS issues)
+open index.html
+
+# Option 2: Static server (recommended)
+python -m http.server 5500
+# Open http://localhost:5500
 ```
 
-Then click **"Run demo pipeline"** in the top bar. This runs the bundled sample
-dataset — a Siemens PLC SKU with three sources that genuinely disagree on weight and
-temperature range — through the full pipeline and shows you the resolved product
-record with confidence scores and an evidence ledger you can expand per attribute.
+### Run Demo
+1. Start backend (`uvicorn app.main:app --reload --port 8000`)
+2. Open frontend
+3. Click **"Run demo pipeline"** in top bar
+4. Watch the Siemens PLC SKU with 3 conflicting sources resolve through the pipeline
 
-## Feeding it your own data
+---
 
-`POST /api/ingest` with:
-```json
-{
-  "product_name": "Your Product",
-  "product_id": "SKU-123",
-  "sources": [
-    {
-      "source_id": "source_1",
-      "source_type": "datasheet",
-      "format": "text",
-      "raw_content": "... raw extracted text ..."
-    }
-  ]
-}
+## API Quick Reference
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/login` | Get JWT token |
+| `POST` | `/api/auth/register` | Register new tenant |
+| `POST` | `/api/ingest` | Ingest text/CSV sources, run full pipeline |
+| `POST` | `/api/ingest/upload` | Upload files (PDF, CSV, images) |
+| `POST` | `/api/ingest/discover` | Auto-discover datasheet + run pipeline |
+| `GET` | `/api/demo/run` | Run bundled demo dataset |
+| `GET` | `/api/products` | List all products (tenant-scoped) |
+| `GET` | `/api/products/{id}` | Full product record with evidence |
+| `POST` | `/api/products/{id}/review` | Approve/edit/reject attribute |
+| `GET` | `/api/products/{id}/ask?q=` | Natural-language Q&A over evidence |
+| `GET` | `/api/products/{id}/export?format=` | Export JSON or Akeneo CSV |
+| `GET` | `/api/reliability` | View learned vs static reliability weights |
+| `GET` | `/api/health` | Health check |
+
+**Interactive docs:** `http://localhost:8000/docs` (Swagger) / `http://localhost:8000/redoc` (ReDoc)
+
+---
+
+## Core Concepts
+
+### Source Reliability Weighting
+| Source Type | Static Prior | Description |
+|-------------|--------------|-------------|
+| `datasheet` | 0.95 | Manufacturer datasheet |
+| `image_label` | 0.90 | Photo of nameplate |
+| `manufacturer_website` | 0.75 | Official product page |
+| `catalog_pdf` | 0.70 | Catalog excerpt |
+| `distributor_erp` | 0.55 | Distributor system export |
+| `unknown` | 0.40 | Fallback |
+
+**Phase 5:** These become **learned per-tenant** via Bayesian Beta-Binomial model updated on every human review action.
+
+### Attribute Resolution Statuses
+| Status | Meaning |
+|--------|---------|
+| `agreed` | All sources agree within tolerance |
+| `resolved_conflict` | Conflict detected, resolved to highest-reliability source |
+| `unresolved_conflict` | Conflict + low confidence → **routed to human review** |
+| `single_source` | Only one source reports this attribute |
+| `human_approved` | Reviewer approved automated resolution |
+| `human_corrected` | Reviewer provided corrected value |
+| `rejected` | Reviewer rejected the attribute |
+
+### Quality Score
 ```
-`source_type` drives the reliability weighting in the arbitration engine — see
-`arbitration.py` → `SOURCE_RELIABILITY`.
+overall_score = 50% × completeness + 50% × avg_confidence
+```
+- `completeness`: % of expected attributes found
+- `avg_confidence`: mean confidence across all resolved attributes
+- `needs_review`: attributes with `unresolved_conflict` or confidence < 0.75
 
-## Why this is built the way it is
+---
 
-See PROBLEM_STATEMENT.md for the full reasoning, but in short: extraction (pulling
-values out of a PDF) is commodity — every LLM can do it. This project's actual value
-is the **arbitration engine** — the part that decides which of several disagreeing
-sources to trust, how confident to be, and shows its work. That's `arbitration.py`,
-and it's the file to read first if you want to understand what makes this different
-from "an AI that reads PDFs."
+## Feeding Your Own Data
+
+### Via API (JSON)
+```bash
+curl -X POST http://localhost:8000/api/ingest \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "product_name": "Your Product",
+    "product_id": "SKU-123",
+    "sources": [
+      {
+        "source_id": "src_1",
+        "source_type": "datasheet",
+        "format": "text",
+        "raw_content": "Supply voltage: 24 V DC\nWeight: 1.5 kg\n...",
+        "location_hint": "Page 3"
+      }
+    ]
+  }'
+```
+
+### Via File Upload
+```bash
+curl -X POST http://localhost:8000/api/ingest/upload \
+  -H "Authorization: Bearer <token>" \
+  -F "product_name=Your Product" \
+  -F "product_id=SKU-123" \
+  -F "source_ids=src_1" \
+  -F "source_types=datasheet" \
+  -F "files=@datasheet.pdf"
+```
+
+---
+
+## Extending the Pipeline
+
+### Add New Attributes
+1. Add regex pattern to `backend/app/extraction.py` → `TEXT_PATTERNS`
+2. Add attribute key to `backend/app/main.py` → `EXPECTED_ATTRIBUTES`
+3. Test with conflicting sources
+
+### Add New Source Types
+1. Add entry to `SOURCE_RELIABILITY` in `arbitration.py`
+2. Handle extraction format if needed
+3. Learning adapts weights automatically per-tenant
+
+### Add Export Connectors
+```python
+# backend/app/export.py
+def export_to_salsify(record): ...
+
+# Register in main.py
+EXPORT_FORMATS["salsify"] = export_to_salsify
+```
+
+### Swap Extraction for LLM/VLM
+Replace `extract_from_text()` in `extraction.py` — arbitration downstream unchanged.
+
+---
+
+## Testing
+
+```bash
+cd backend
+python -m pytest tests/ -v
+
+# With coverage
+python -m pytest tests/ --cov=app --cov-report=html
+```
+
+---
+
+## Configuration
+
+Create `.env` in `backend/`:
+```bash
+# Database (SQLite default, Postgres for production)
+DATABASE_URL=sqlite:///./veritas.db
+# DATABASE_URL=postgresql://user:pass@host:5432/veritas
+
+# Auth
+JWT_SECRET=your-32-byte-base64-secret
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=60
+
+# CORS (lock down before production!)
+CORS_ORIGINS=http://localhost:5500,https://yourdomain.com
+
+# Optional: LLM extraction fallback
+NVIDIA_API_KEY=...
+OPENAI_API_KEY=...
+
+# Optional: Discovery agent
+SEARCH_API_KEY=...
+```
+
+---
+
+## Production Checklist
+
+- [ ] PostgreSQL (not SQLite) — set `DATABASE_URL`
+- [ ] Strong `JWT_SECRET` (32+ random bytes)
+- [ ] Restrict `CORS_ORIGINS` to your domains
+- [ ] Rate limiting middleware
+- [ ] Request size limits for uploads
+- [ ] Structured JSON logging
+- [ ] Health checks for orchestration
+- [ ] Database migrations (Alembic)
+- [ ] SSL/TLS termination
+- [ ] Monitoring/alerting
+- [ ] Backup strategy
+- [ ] Load testing
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) if present.
+
+---
+
+## Contributing
+
+1. Read [PROBLEM_STATEMENT.md](PROBLEM_STATEMENT.md) and [STATUS_AND_ROADMAP.md](STATUS_AND_ROADMAP.md)
+2. Check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for extension points
+3. Run tests: `cd backend && pytest tests/`
+4. Open PR with clear description of what arbitration/trust capability it improves
+
+---
+
+## Acknowledgments
+
+- **UniHack 2024** competition submission
+- Industrial product data standards: ETIM, ECLASS, UNSPSC, Unilog
+- Siemens sample data for demo (publicly available datasheets)

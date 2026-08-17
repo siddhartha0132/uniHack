@@ -14,7 +14,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Dict
 
-from sqlalchemy import Column, String, Float, Text, DateTime, JSON
+from sqlalchemy import Column, String, Float, Integer, Text, DateTime, JSON
 from sqlalchemy.types import TypeDecorator
 
 from .database import Base
@@ -40,21 +40,22 @@ class Product(Base):
     """
     __tablename__ = "products"
 
-    product_id   = Column(String, primary_key=True, index=True)
-    tenant_id    = Column(String, primary_key=True, index=True, default="tenant_demo")
-    product_name = Column(String, nullable=False)
+    product_id: Any   = Column(String, primary_key=True, index=True)
+    tenant_id: Any    = Column(String, primary_key=True, index=True, default="tenant_demo")
+    product_name: Any = Column(String, nullable=False)
 
     # Full resolved pipeline output stored as JSON blobs
-    attributes_json     = Column(JSONColumn, default=dict)
-    quality_json        = Column(JSONColumn, default=dict)
-    classification_json = Column(JSONColumn, nullable=True)
-    related_json        = Column(JSONColumn, default=dict)
-    sources_json        = Column(JSONColumn, default=list)
-    review_log_json     = Column(JSONColumn, default=list)
+    attributes_json: Any     = Column(JSONColumn, default=dict)
+    quality_json: Any        = Column(JSONColumn, default=dict)
+    classification_json: Any = Column(JSONColumn, nullable=True)
+    related_json: Any        = Column(JSONColumn, default=dict)
+    sources_json: Any        = Column(JSONColumn, default=list)
+    review_log_json: Any     = Column(JSONColumn, default=list)
 
-    created_at  = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at  = Column(DateTime, default=lambda: datetime.now(timezone.utc),
+    created_at: Any  = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at: Any  = Column(DateTime, default=lambda: datetime.now(timezone.utc),
                          onupdate=lambda: datetime.now(timezone.utc))
+    version: Any     = Column(Integer, default=1, nullable=False)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert ORM row back to the same dict shape the API returns."""
@@ -67,6 +68,7 @@ class Product(Base):
             "related":        self.related_json or {},
             "sources":        self.sources_json or [],
             "review_log":     self.review_log_json or [],
+            "version":        self.version,
         }
 
     @classmethod
@@ -74,6 +76,7 @@ class Product(Base):
         """Build an ORM row from the pipeline output dict."""
         return cls(
             product_id          = d["product_id"],
+            tenant_id           = d.get("tenant_id", "tenant_demo"),
             product_name        = d["product_name"],
             attributes_json     = d.get("attributes", {}),
             quality_json        = d.get("quality", {}),
@@ -92,16 +95,18 @@ class CustomerReliability(Base):
     """
     __tablename__ = "customer_reliability"
 
-    id          = Column(String, primary_key=True)  # "{tenant_id}:{customer_id}:{source_type}"
-    tenant_id   = Column(String, nullable=False, default="tenant_demo")
-    customer_id = Column(String, nullable=False, default="global")
-    source_type = Column(String, nullable=False)
-    alpha       = Column(Float, default=1.0)   # number of correct resolutions + 1
-    beta        = Column(Float, default=1.0)   # number of corrections + 1
-    updated_at  = Column(DateTime, default=lambda: datetime.now(timezone.utc),
+    id: Any          = Column(String, primary_key=True)  # "{tenant_id}:{customer_id}:{source_type}"
+    tenant_id: Any   = Column(String, nullable=False, default="tenant_demo")
+    customer_id: Any = Column(String, nullable=False, default="global")
+    source_type: Any = Column(String, nullable=False)
+    alpha: Any       = Column(Float, default=1.0)   # number of correct resolutions + 1
+    beta: Any        = Column(Float, default=1.0)   # number of corrections + 1
+    updated_at: Any  = Column(DateTime, default=lambda: datetime.now(timezone.utc),
                          onupdate=lambda: datetime.now(timezone.utc))
 
     @property
     def mean_reliability(self) -> float:
         """Beta distribution mean: alpha / (alpha + beta)."""
-        return self.alpha / (self.alpha + self.beta)
+        a = float(getattr(self, "alpha", 1.0) or 1.0)
+        b = float(getattr(self, "beta", 1.0) or 1.0)
+        return a / (a + b)
