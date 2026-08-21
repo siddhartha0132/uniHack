@@ -6,6 +6,12 @@ async function request(path, options = {}) {
   if (token) headers['Authorization'] = `Bearer ${token}`;
   
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (res.status === 401) {
+    if (token) {
+      localStorage.removeItem('veritas_token');
+      window.location.reload();
+    }
+  }
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`API ${res.status}: ${text}`);

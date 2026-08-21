@@ -8,6 +8,7 @@ import ProductDetail from "./components/ProductDetail";
 import IngestModal from "./components/IngestModal";
 import { ToastProvider, useToast } from "./components/Toast";
 import Login from "./components/Login";
+import LandingPage from "./components/LandingPage";
 
 function AppInner() {
   const toast = useToast();
@@ -15,6 +16,7 @@ function AppInner() {
   const [token, setToken] = useState(() => localStorage.getItem('veritas_token'));
   const [demoRunning, setDemoRunning] = useState(false);
   const [showIngest, setShowIngest] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
 
   const { products, loading: productsLoading, refresh: refreshProducts } = useProducts();
   const { product, loading: productLoading, load: loadProduct, review } = useProduct();
@@ -72,6 +74,11 @@ function AppInner() {
     [refreshProducts, loadProduct, toast]
   );
 
+  // Show landing page first
+  if (showLanding) {
+    return <LandingPage onEnterApp={() => setShowLanding(false)} />;
+  }
+
   if (!token) {
     return <Login onLogin={setToken} />;
   }
@@ -116,3 +123,4 @@ export default function App() {
     </ToastProvider>
   );
 }
+
