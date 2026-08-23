@@ -5,8 +5,8 @@ services:
     plan: starter
     region: oregon
     buildCommand: |
-      pip install --upgrade pip uv
-      uv pip install --only-binary=:all: -r backend/requirements.txt
+      pip install --upgrade pip
+      pip install --only-binary=:all: -r backend/requirements.txt
     startCommand: |
       cd backend && ./start.sh
     envVars:
