@@ -25,6 +25,7 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
   if (!product) {
     return (
       <div className="detail-panel">
+        <div style={{ maxWidth: "860px" }}>
 
         {/* Hero headline */}
         <div style={{ marginBottom: "32px" }}>
@@ -130,6 +131,8 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
             Veritas resolves weight, voltage, temperature range, and protection class conflicts with Bayesian source reliability learning.
           </p>
         </div>
+
+        </div>{/* end max-width wrapper */}
       </div>
     );
   }
@@ -165,7 +168,7 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
         .detail-panel {
           flex: 1;
           overflow-y: auto;
-          padding: 32px 40px;
+          padding: 36px 44px 56px;
           background: var(--bg-subtle);
         }
         .detail-empty {
