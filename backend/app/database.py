@@ -26,17 +26,26 @@ def normalize_database_url(url: str) -> str:
     elif url.startswith("postgresql://") and "psycopg" not in url:
         url = url.replace("postgresql://", "postgresql+psycopg://", 1)
         
-    # 2. Supabase project ref and pooler handling
-    project_ref = os.getenv("SUPABASE_PROJECT_REF", "jddyiqdllaytbhopjmch")
+    # 2. Extract project_ref from URL itself (most reliable) before falling back to env var.
+    project_ref = None
+    db_match = re.search(r"@db\.([a-z0-9]+)\.supabase\.co", url)
+    if db_match:
+        project_ref = db_match.group(1)
     
-    # 2a. Supabase IPv6 direct host -> IPv4 connection pooler auto-rewrite
-    match = re.search(r"@db\.([a-z0-9]+)\.supabase\.co(?::\d+)?", url)
-    if match:
-        project_ref = match.group(1)
-        region = os.getenv("SUPABASE_REGION", "ap-northeast-2")
-        url = re.sub(r"@db\.[a-z0-9]+\.supabase\.co(:\d+)?", f"@aws-0-{region}.pooler.supabase.com:5432", url)
+    # 2a. Supabase direct host -> IPv4 connection pooler rewrite (if not already pooler)
+    if "db." in url and "supabase.co" in url and "pooler" not in url:
+        if not project_ref:
+            project_ref = db_match.group(1) if db_match else None
+        if project_ref:
+            region = os.getenv("SUPABASE_REGION", "ap-northeast-2")
+            url = re.sub(r"@db\.[a-z0-9]+\.supabase\.co(:\d+)?", f"@aws-0-{region}.pooler.supabase.com:5432", url)
+    
+    # 2b. Fallback to env var or default for project ref
+    if not project_ref:
+        env_ref = os.getenv("SUPABASE_PROJECT_REF", "").strip()
+        project_ref = env_ref if env_ref else "jddyiqdllaytbhopjmch"
 
-    # 2b. Ensure tenant identifier (.project_ref) is present in username for pooler
+    # 2c. Ensure tenant identifier (.project_ref) is present in username for pooler
     if "pooler.supabase.com" in url:
         user_pass_match = re.search(r"://([^@]+)@", url)
         if user_pass_match:
