@@ -25,59 +25,110 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
   if (!product) {
     return (
       <div className="detail-panel">
-        <p className="eyebrow">Getting Started</p>
-        <h1 className="detail-title">Product Resolution & Arbitration</h1>
 
-        <div className="card" style={{ padding: "24px 28px", marginBottom: "24px" }}>
-          <p style={{ fontSize: "14px", color: "var(--text-primary)", lineHeight: "1.6", marginBottom: "20px" }}>
-            Select a product from the sidebar to inspect its evidence ledger, or run the pipeline using one of the options below:
+        {/* Hero headline */}
+        <div style={{ marginBottom: "32px" }}>
+          <p className="eyebrow" style={{ marginBottom: "8px", letterSpacing: "0.1em" }}>Veritas · Data Arbitration Engine</p>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "28px", fontWeight: 800, lineHeight: 1.2, margin: "0 0 12px", color: "var(--text-primary)" }}>
+            Resolve product data conflicts<br/>
+            <span style={{ color: "var(--teal)" }}>with traceable evidence.</span>
+          </h1>
+          <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.65, maxWidth: "580px", margin: 0 }}>
+            Multi-source arbitration pipeline that ingests raw datasheets, product pages and ERP exports —
+            then surfaces a single trusted truth with full confidence scoring and audit history.
           </p>
+        </div>
 
-          <div className="action-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "20px" }}>
-            <div style={{ background: "var(--bg-subtle)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "18px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "14px" }}>
-              <div>
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "6px" }}>
-                  1. Run Demo Pipeline
-                </h3>
-                <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: "1.5", margin: 0 }}>
-                  Instantly execute conflict arbitration on the Siemens PLC dataset across 3 conflicting sources (Datasheet, Product Page, Distributor ERP).
-                </p>
-              </div>
-              {onRunDemo && (
-                <button className="btn btn-primary btn-sm" onClick={onRunDemo} style={{ alignSelf: "flex-start" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                  </svg>
-                  Run Demo Pipeline
-                </button>
-              )}
-            </div>
+        {/* 2 action cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
 
-            <div style={{ background: "var(--bg-subtle)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "18px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "14px" }}>
-              <div>
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "6px" }}>
-                  2. Enter Demo Data / Custom Sources
-                </h3>
-                <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: "1.5", margin: 0 }}>
-                  Upload your own PDF, CSV, or text files, or inspect and modify raw source inputs before triggering arbitration.
-                </p>
+          {/* Card 1 — Enter Demo Data */}
+          <div style={{
+            background: "var(--panel)",
+            border: "1px solid var(--border)",
+            borderTop: "2px solid var(--teal)",
+            borderRadius: "var(--radius)",
+            padding: "22px",
+            display: "flex", flexDirection: "column", gap: "16px"
+          }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+                <span style={{
+                  fontFamily: "var(--font-mono)", fontSize: "10px", fontWeight: 700,
+                  background: "rgba(56,201,173,0.12)", color: "var(--teal)",
+                  border: "1px solid var(--teal-dim)", borderRadius: "4px", padding: "2px 8px"
+                }}>OPTION 1 — RECOMMENDED</span>
               </div>
-              {onOpenIngest && (
-                <button className="btn btn-secondary btn-sm" onClick={onOpenIngest} style={{ alignSelf: "flex-start", border: "1px solid var(--border)" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-                  </svg>
-                  Enter Demo Data
-                </button>
-              )}
+              <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 8px" }}>
+                Enter Demo Data
+              </h3>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6", margin: "0 0 12px" }}>
+                Load the 3 pre-built Siemens PLC sources instantly. See the product name, SKU, and all sources pre-filled — then hit <strong style={{ color: "var(--text-primary)" }}>Run arbitration pipeline</strong> to watch conflicts resolve in real-time.
+              </p>
+              <div style={{ fontSize: "11.5px", color: "var(--text-faint)", fontFamily: "var(--font-mono)", lineHeight: "1.8" }}>
+                <div>✓ &nbsp;Best for demos &amp; presentations</div>
+                <div>✓ &nbsp;Pre-loaded conflicting sources ready</div>
+                <div>✓ &nbsp;See arbitration results in ~3 seconds</div>
+              </div>
             </div>
+            {onOpenIngest && (
+              <button className="btn btn-primary btn-sm" onClick={onOpenIngest} style={{ alignSelf: "flex-start" }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Enter Demo Data
+              </button>
+            )}
           </div>
 
-          <div style={{ borderTop: "1px solid var(--border-soft)", paddingTop: "14px" }}>
-            <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0, fontFamily: "var(--font-mono)" }}>
-              The demo dataset features a Siemens PLC SKU (6ES7214-1AG40-0XB0) sourced from three genuinely conflicting sources. Veritas extracts physical specifications and arbitrates true values with full evidence provenance and Bayesian reliability learning.
-            </p>
+          {/* Card 2 — Run Demo Pipeline */}
+          <div style={{
+            background: "var(--panel)",
+            border: "1px solid var(--border)",
+            borderTop: "2px solid var(--border)",
+            borderRadius: "var(--radius)",
+            padding: "22px",
+            display: "flex", flexDirection: "column", gap: "16px"
+          }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+                <span style={{
+                  fontFamily: "var(--font-mono)", fontSize: "10px", fontWeight: 700,
+                  background: "rgba(255,255,255,0.04)", color: "var(--text-secondary)",
+                  border: "1px solid var(--border)", borderRadius: "4px", padding: "2px 8px"
+                }}>OPTION 2 — ONE-CLICK</span>
+              </div>
+              <h3 style={{ fontSize: "15px", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 8px" }}>
+                Run Demo Pipeline
+              </h3>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6", margin: "0 0 12px" }}>
+                Skip setup entirely. Triggers the full arbitration pipeline in the background using the Siemens PLC dataset and shows you the resolved product card immediately.
+              </p>
+              <div style={{ fontSize: "11.5px", color: "var(--text-faint)", fontFamily: "var(--font-mono)", lineHeight: "1.8" }}>
+                <div>✓ &nbsp;No configuration needed</div>
+                <div>✓ &nbsp;Full pipeline in one click</div>
+                <div>✓ &nbsp;Best to show final output quickly</div>
+              </div>
+            </div>
+            {onRunDemo && (
+              <button className="btn btn-ghost btn-sm" onClick={onRunDemo} style={{ alignSelf: "flex-start", border: "1px solid var(--border)" }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                Run Demo Pipeline
+              </button>
+            )}
           </div>
+        </div>
+
+        {/* Dataset footnote */}
+        <div style={{ background: "var(--bg-subtle)", border: "1px solid var(--border-soft)", borderRadius: "var(--radius)", padding: "14px 18px" }}>
+          <p style={{ fontSize: "11.5px", color: "var(--text-faint)", lineHeight: "1.65", margin: 0, fontFamily: "var(--font-mono)" }}>
+            <span style={{ color: "var(--text-secondary)", fontWeight: 600 }}>Demo dataset · </span>
+            Siemens SIMATIC S7-1200 CPU 1214C — SKU <span style={{ color: "var(--teal)" }}>6ES7214-1AG40-0XB0</span>.
+            Three conflicting sources: <em>Technical Datasheet</em>, <em>Manufacturer Product Page</em>, <em>Distributor ERP Export</em>.
+            Veritas resolves weight, voltage, temperature range, and protection class conflicts with Bayesian source reliability learning.
+          </p>
         </div>
       </div>
     );
