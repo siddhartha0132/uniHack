@@ -81,28 +81,6 @@ export default function IngestModal({ onClose, onSuccess }) {
     }
   };
 
-  const handleDiscover = async () => {
-    if (!productName.trim() || !productId.trim()) {
-      setError("Product name and ID are required for auto-discovery.");
-      return;
-    }
-    setError(null);
-    setLoading(true);
-    try {
-      const result = await api.ingestDiscover({
-        product_name: productName.trim(),
-        product_id: productId.trim(),
-        sources: [], // Empty sources triggers auto-discovery
-      });
-      onSuccess(result);
-      onClose();
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleLoadDemoData = () => {
     setProductName("SIMATIC S7-1200 CPU 1214C");
     setProductId("6ES7214-1AG40-0XB0");
@@ -163,24 +141,14 @@ Buy now or find a distributor near you.`
       <div className="modal-box ingest-modal">
         <div className="modal-header">
           <div>
-            <p className="eyebrow">New ingestion</p>
-            <h2>Ingest product sources</h2>
+            <p className="eyebrow">Product Input</p>
+            <h2>Enter Demo Data / Sources</h2>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              type="button"
-              className="btn btn-ghost btn-sm"
-              onClick={handleLoadDemoData}
-              style={{ color: 'var(--teal)', border: '1px solid var(--teal-dim)' }}
-            >
-              📋 Load 3 Demo Sources
-            </button>
-            <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Close">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-          </div>
+          <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="ingest-form">
@@ -273,11 +241,16 @@ Buy now or find a distributor near you.`
           {error && <div className="ingest-error">{error}</div>}
 
           <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={handleLoadDemoData}
+              style={{ marginRight: 'auto', color: 'var(--teal)', border: '1px solid var(--teal-dim)' }}
+            >
+              📋 Load Demo Sources
+            </button>
             <button type="button" className="btn btn-ghost" onClick={onClose} disabled={loading}>
               Cancel
-            </button>
-            <button type="button" className="btn btn-ghost" onClick={handleDiscover} disabled={loading} style={{ marginRight: 'auto', color: 'var(--teal)' }}>
-              {loading ? "Searching web..." : "✨ Auto-discover from SKU"}
             </button>
             <button type="submit" className="btn btn-primary" disabled={loading}>
               {loading ? (
