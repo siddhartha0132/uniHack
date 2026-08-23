@@ -5,7 +5,7 @@ Phase 3: SQLAlchemy engine + session factory.
 
 DATABASE_URL defaults to SQLite (zero-setup for local dev).
 Swap in Postgres for production by setting the env var:
-    DATABASE_URL=postgresql://user:pass@host:5432/veritas
+    DATABASE_URL=postgresql+psycopg://user:pass@host:5432/veritas
 
 The schema stays the same — all JSON columns, no over-normalization for MVP.
 """
@@ -15,6 +15,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./veritas.db")
+
+# Use psycopg v3 dialect if psycopg2 not available
+if DATABASE_URL.startswith("postgresql://") and "psycopg" not in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 
 # SQLite needs check_same_thread=False for FastAPI's async handlers
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
