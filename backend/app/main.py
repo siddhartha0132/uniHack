@@ -142,7 +142,11 @@ def _run_pipeline(
         }
 
     # Phase 5: fetch learned reliability weights for this run
-    reliability_overrides = learning.get_learned_weights(db, tenant_id=tenant_id)
+    try:
+        reliability_overrides = learning.get_learned_weights(db, tenant_id=tenant_id)
+    except Exception as e:
+        print(f"⚠️ Warning: could not fetch learned weights ({e}), using default priors")
+        reliability_overrides = {}
 
     resolved = arbitration.arbitrate(observations_by_source, reliability_overrides)
     quality = arbitration.compute_quality_score(resolved, EXPECTED_ATTRIBUTES)
@@ -188,11 +192,14 @@ def _save_product(record: Dict[str, Any], db: Session, expected_version: int | N
 
 
 def _load_product(product_id: str, tenant_id: str, db: Session) -> Optional[Dict[str, Any]]:
-    row = db.query(Product).filter_by(product_id=product_id, tenant_id=tenant_id).first()
-    if row:
-        d = row.to_dict()
-        d["_version"] = row.version
-        return d
+    try:
+        row = db.query(Product).filter_by(product_id=product_id, tenant_id=tenant_id).first()
+        if row:
+            d = row.to_dict()
+            d["_version"] = row.version
+            return d
+    except Exception as e:
+        print(f"⚠️ Warning: _load_product notice ({e})")
     return None
 
 
@@ -205,9 +212,16 @@ def health():
 
 @app.post("/api/ingest")
 def ingest(req: IngestRequest, db: Session = Depends(get_db), tenant_id: str = Depends(get_current_tenant)):
-    record = _run_pipeline(req.product_name, req.product_id, req.sources, db, tenant_id)
-    _save_product(record, db)
-    return record
+    try:
+        record = _run_pipeline(req.product_name, req.product_id, req.sources, db, tenant_id)
+        _save_product(record, db)
+        return record
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/api/ingest/upload")
