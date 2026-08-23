@@ -24,18 +24,18 @@ export default function ProductDetail({ product, onReview, loading }) {
 
   if (!product) {
     return (
-      <div className="detail-panel">
+      <div className="detail-panel" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div className="detail-empty">
           <div className="empty-icon">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--border)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
             </svg>
           </div>
-          <p className="eyebrow" style={{ textAlign: "center" }}>no product selected</p>
+          <p className="eyebrow" style={{ textAlign: "center", margin: 0 }}>no product selected</p>
           <h1 style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 700, textAlign: "center", margin: "8px 0 14px" }}>
             Select a product or run the demo
           </h1>
-          <p style={{ fontSize: 13.5, color: "var(--text-secondary)", textAlign: "center", lineHeight: 1.7, maxWidth: 440 }}>
+          <p style={{ fontSize: 14, color: "var(--text-secondary)", textAlign: "center", lineHeight: 1.75, maxWidth: 520, margin: "0 auto", textWrap: "balance" }}>
             The demo dataset is a Siemens PLC SKU sourced from three genuinely disagreeing sources — a technical datasheet, a manufacturer product page, and a distributor ERP export. Watch the arbitration engine resolve conflicts with full evidence.
           </p>
         </div>
