@@ -5,9 +5,9 @@ set -e
 
 echo "🚀 Starting Veritas Backend..."
 
-# Run database migrations
+# Run database migrations (from backend directory)
 echo "📦 Running database migrations..."
-cd /app
+cd backend
 alembic upgrade head
 
 # Start the application
