@@ -63,6 +63,7 @@ function AppInner() {
       }
       await refreshProducts();
       await loadProduct(result.product_id);
+      window.history.pushState({ view: "product", id: result.product_id }, "", `#${result.product_id}`);
       toast("Demo pipeline complete!", "success");
     } catch (e) {
       toast(`Error: ${e.message}`, "error");
@@ -74,9 +75,20 @@ function AppInner() {
   const handleSelectProduct = useCallback(
     async (id) => {
       await loadProduct(id);
+      window.history.pushState({ view: "product", id }, "", `#${id}`);
     },
     [loadProduct]
   );
+
+  // Handle browser back/forward
+  useEffect(() => {
+    const onPop = () => {
+      setProduct(null);
+      window.history.replaceState({ view: "home" }, "", window.location.pathname);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [setProduct]);
 
   const handleReview = useCallback(
     async (attribute, action, correctedValue) => {
@@ -134,7 +146,10 @@ function AppInner() {
           onReview={handleReview}
           onOpenIngest={() => setShowIngest(true)}
           onRunDemo={handleRunDemo}
-          onBack={() => setProduct(null)}
+          onBack={() => {
+            setProduct(null);
+            window.history.back();
+          }}
         />
       </div>
 
