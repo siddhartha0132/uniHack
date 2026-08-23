@@ -52,7 +52,7 @@ export default function ProductDetail({ product, onReview, loading }) {
 
       <EvidenceLedger
         attributes={product.attributes}
-        onReview={(attr, action) => onReview(attr, action)}
+        onReview={(attr, action, val) => onReview(attr, action, val)}
       />
 
       <div className="meta-grid">

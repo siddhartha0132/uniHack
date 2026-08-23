@@ -36,16 +36,30 @@ function EvidenceItem({ ev }) {
 export default function AttributeRow({ name, attr, onReview }) {
   const [open, setOpen] = useState(false);
   const [reviewing, setReviewing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(() =>
+    Array.isArray(attr.resolved_value)
+      ? attr.resolved_value.join(" – ")
+      : attr.resolved_value ?? ""
+  );
+
   const confPct = Math.round(attr.confidence * 100);
   const color = confColor(attr.confidence);
 
-  const handleReview = async (action) => {
+  const handleReview = async (action, val) => {
     setReviewing(true);
     try {
-      await onReview(name, action);
+      await onReview(name, action, val);
+      setIsEditing(false);
     } finally {
       setReviewing(false);
     }
+  };
+
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    if (editValue.trim() === "") return;
+    handleReview("edit", editValue.trim());
   };
 
   return (
@@ -84,10 +98,32 @@ export default function AttributeRow({ name, attr, onReview }) {
             ))}
           </div>
 
-          {attr.status !== "human_approved" &&
-            attr.status !== "human_corrected" &&
-            attr.status !== "rejected" && (
-              <div className="review-actions">
+          {isEditing ? (
+            <form onSubmit={handleSaveEdit} className="inline-edit-form" style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "10px" }}>
+              <input
+                type="text"
+                className="input input-sm"
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                placeholder="Enter corrected value"
+                autoFocus
+                style={{ maxWidth: "260px" }}
+              />
+              <button type="submit" className="btn btn-sm btn-primary" disabled={reviewing}>
+                {reviewing ? "Saving…" : "Save"}
+              </button>
+              <button
+                type="button"
+                className="btn btn-sm btn-ghost"
+                onClick={() => setIsEditing(false)}
+                disabled={reviewing}
+              >
+                Cancel
+              </button>
+            </form>
+          ) : (
+            <div className="review-actions" style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
+              {attr.status !== "human_approved" && (
                 <button
                   className="btn btn-sm"
                   style={{ color: "var(--teal)", borderColor: "var(--teal-dim)" }}
@@ -96,6 +132,21 @@ export default function AttributeRow({ name, attr, onReview }) {
                 >
                   ✓ Approve
                 </button>
+              )}
+              {attr.status !== "human_corrected" && (
+                <button
+                  className="btn btn-sm"
+                  style={{ color: "var(--amber)", borderColor: "var(--amber-dim)" }}
+                  onClick={() => {
+                    setEditValue(Array.isArray(attr.resolved_value) ? attr.resolved_value.join(" – ") : (attr.resolved_value ?? ""));
+                    setIsEditing(true);
+                  }}
+                  disabled={reviewing}
+                >
+                  ✏️ Edit
+                </button>
+              )}
+              {attr.status !== "rejected" && (
                 <button
                   className="btn btn-sm btn-danger"
                   onClick={() => handleReview("reject")}
@@ -103,8 +154,9 @@ export default function AttributeRow({ name, attr, onReview }) {
                 >
                   ✗ Reject
                 </button>
-              </div>
-            )}
+              )}
+            </div>
+          )}
         </div>
       )}
 

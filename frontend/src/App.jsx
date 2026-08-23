@@ -79,12 +79,12 @@ function AppInner() {
   );
 
   const handleReview = useCallback(
-    async (attribute, action) => {
+    async (attribute, action, correctedValue) => {
       try {
-        await review(attribute, action);
+        await review(attribute, action, correctedValue);
         await refreshProducts();
         toast(
-          `Attribute "${attribute.replace(/_/g, " ")}" ${action}d.`,
+          `Attribute "${attribute.replace(/_/g, " ")}" ${action === "edit" ? "updated" : action + "d"}.`,
           action === "reject" ? "error" : "success"
         );
       } catch (e) {
