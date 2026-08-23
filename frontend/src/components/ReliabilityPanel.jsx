@@ -7,7 +7,8 @@ export default function ReliabilityPanel() {
 
   useEffect(() => {
     if (open && !data) {
-      fetch(`${import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000"}/api/reliability`)
+      const base = (import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000").replace(/\/+$/, "");
+      fetch(`${base}/api/reliability`)
         .then((r) => r.json())
         .then(setData)
         .catch(() => {});

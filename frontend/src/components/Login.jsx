@@ -15,7 +15,7 @@ export default function Login({ onLogin }) {
       formData.append('username', username);
       formData.append('password', password);
       
-      const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+      const API_BASE = (import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000").replace(/\/+$/, "");
       const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -23,7 +23,8 @@ export default function Login({ onLogin }) {
       });
       
       if (!res.ok) {
-        throw new Error('Login failed');
+        const text = await res.text().catch(() => "");
+        throw new Error(`Login failed (${res.status}): ${text || "Invalid credentials"}`);
       }
       
       const data = await res.json();
