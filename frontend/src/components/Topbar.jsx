@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import { api } from "../api/client";
 
-export default function Topbar({ apiOk, onRunDemo, running, onOpenIngest }) {
+export default function Topbar({ apiOk, onRunDemo, running, onOpenIngest, onHome }) {
   return (
     <header className="topbar">
-      <div className="brand">
+      <div
+        className="brand"
+        onClick={onHome}
+        style={{ cursor: onHome ? "pointer" : "default" }}
+        title="Back to home"
+      >
         <div className="brand-mark">V</div>
         <div className="brand-text">
           <span className="brand-name">Veritas</span>

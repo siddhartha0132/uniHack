@@ -132,6 +132,7 @@ function AppInner() {
         onRunDemo={handleRunDemo}
         running={demoRunning}
         onOpenIngest={() => setShowIngest(true)}
+        onHome={() => { setProduct(null); setShowLanding(true); }}
       />
 
       <div className="main-layout">
