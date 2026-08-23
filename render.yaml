@@ -2,7 +2,6 @@ services:
   - type: web
     name: veritas-backend
     runtime: python
-    pythonVersion: "3.11"
     plan: starter
     region: oregon
     buildCommand: |
