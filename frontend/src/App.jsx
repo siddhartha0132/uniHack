@@ -110,6 +110,7 @@ function AppInner() {
     async (result) => {
       await refreshProducts();
       await loadProduct(result.product_id);
+      window.history.pushState({ view: "product", id: result.product_id }, "", `#${result.product_id}`);
       toast(`"${result.product_name}" processed successfully.`, "success");
     },
     [refreshProducts, loadProduct, toast]
