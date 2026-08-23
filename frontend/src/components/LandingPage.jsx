@@ -139,11 +139,12 @@ function Card3D({ icon, title, label, accentColor, delay = 0, children }) {
         padding: "3px 10px", borderRadius: 99, width: "fit-content", marginBottom: 16,
       }}>{label}</div>
       <div style={{
-        width: 52, height: 52, borderRadius: 12,
-        background: "rgba(255,255,255,0.04)",
+        width: 48, height: 48, borderRadius: 12,
+        background: `linear-gradient(135deg, ${accentColor}18, ${accentColor}06)`,
+        border: `1px solid ${accentColor}30`,
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 26, marginBottom: 14,
-        boxShadow: `0 8px 24px ${accentColor}30`,
+        marginBottom: 16,
+        boxShadow: `0 4px 20px ${accentColor}20`,
       }}>{icon}</div>
       <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{title}</div>
       <div style={{ fontSize: 12, color: "#7A95A8", lineHeight: 1.6, fontFamily: "'IBM Plex Mono', monospace" }}>{children}</div>
@@ -410,16 +411,16 @@ export default function LandingPage({ onEnterApp }) {
 
         {/* 3D Cards */}
         <div style={{ display: "flex", gap: 18, justifyContent: "center", flexWrap: "wrap", padding: "56px 24px 0", position: "relative", zIndex: 1, animation: "lp-fadeUp 0.9s 0.55s ease both" }}>
-          <Card3D icon="📄" title="Multi-Source Ingest" label="EXTRACT" accentColor="#3FC1A9" delay={0}>
+          <Card3D icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3FC1A9" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>} title="Multi-Source Ingest" label="EXTRACT" accentColor="#3FC1A9" delay={0}>
             PDF datasheets, ERP CSVs, web pages, image labels — all ingested automatically.
           </Card3D>
-          <Card3D icon="⚖️" title="Conflict Arbitration" label="ARBITRATE" accentColor="#E8A33D" delay={100}>
+          <Card3D icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8A33D" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>} title="Conflict Arbitration" label="ARBITRATE" accentColor="#E8A33D" delay={100}>
             Weighted reliability scoring resolves contradictions with a full evidence trail.
           </Card3D>
-          <Card3D icon="🏷️" title="Auto Classification" label="CLASSIFY" accentColor="#52D9BE" delay={200}>
+          <Card3D icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#52D9BE" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>} title="Auto Classification" label="CLASSIFY" accentColor="#52D9BE" delay={200}>
             Auto-maps to ETIM, ECLASS, UNSPSC codes — required by every industrial marketplace.
           </Card3D>
-          <Card3D icon="🔍" title="Human Review Loop" label="VERIFY" accentColor="#E05C3A" delay={300}>
+          <Card3D icon={<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E05C3A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><polyline points="16 11 17 13 21 13"/></svg>} title="Human Review Loop" label="VERIFY" accentColor="#E05C3A" delay={300}>
             Low-confidence attributes flagged for expert review. Corrections improve future runs.
           </Card3D>
         </div>
@@ -456,8 +457,8 @@ export default function LandingPage({ onEnterApp }) {
                 "Errors propagate to customer portals causing returns",
                 "Domain knowledge locked in individual engineers' heads",
               ].map((t, i) => (
-                <li key={i} style={{ display: "flex", gap: 10, fontSize: 13.5, color: "#7A95A8", fontFamily: "'IBM Plex Mono', monospace", lineHeight: 1.5 }}>
-                  <span style={{ color: "#4A606E", flexShrink: 0 }}>//</span> {t}
+                <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 13, color: "#7A95A8", lineHeight: 1.55 }}>
+                  <span style={{ color: "#E05C3A", flexShrink: 0, marginTop: 1, fontWeight: 700, fontSize: 15 }}>✗</span> {t}
                 </li>
               ))}
             </ul>
