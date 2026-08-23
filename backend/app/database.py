@@ -17,7 +17,9 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./veritas.db")
 
 # Use psycopg v3 dialect if psycopg2 not available
-if DATABASE_URL.startswith("postgresql://") and "psycopg" not in DATABASE_URL:
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif DATABASE_URL.startswith("postgresql://") and "psycopg" not in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 
 # SQLite needs check_same_thread=False for FastAPI's async handlers
