@@ -1,0 +1,601 @@
+{
+  "per_item": {
+    "PDSH4816AF": {
+      "key_fields": {
+        "MANUFACTURER_NAME": {
+          "match": true,
+          "score": 1.0,
+          "gt": "Rheem Manufacturing",
+          "pred": "Rheem Manufacturing",
+          "note": "Exact match (normalized)"
+        },
+        "BRAND_NAME": {
+          "match": true,
+          "score": 1.0,
+          "gt": "FRIGIDAIRE\u00ae",
+          "pred": "FRIGIDAIRE\u00ae",
+          "note": "Exact match (normalized)"
+        },
+        "MANUFACTURER_PART_NUMBER": {
+          "match": true,
+          "score": 1.0,
+          "gt": "PDSH4816AF",
+          "pred": "PDSH4816AF",
+          "note": "Exact match (normalized)"
+        },
+        "Classpath": {
+          "match": true,
+          "score": 1.0,
+          "gt": "Appliances & Consumer Electronics>Kitchen Appliances>Built-In Dishwashers",
+          "pred": "Appliances & Consumer Electronics>Kitchen Appliances>Built-In Dishwashers",
+          "note": "Exact match (normalized)"
+        },
+        "Product_Name": {
+          "match": true,
+          "score": 1.0,
+          "gt": "",
+          "pred": "",
+          "note": "Both empty"
+        }
+      },
+      "descriptions": {
+        "INVOICE_DESC": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "DISHWASHER LEG 5 SST 120V 15A 50-1/4IN",
+            "pred": "DISHWASHER LEG 5 SST 120V 15A 50-1/4IN",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "INVOICE_DESC",
+            "length": 38,
+            "limit": 40,
+            "compliant": true,
+            "value": "DISHWASHER LEG 5 SST 120V 15A 50-1/4IN"
+          }
+        },
+        "MOBILE_DESC": {
+          "accuracy": {
+            "match": true,
+            "score": 0.9933774834437085,
+            "gt": "Rheem Manufacturing FRIGIDAIRE, Dishwasher, Professional Series, PDSH4816AF",
+            "pred": "Rheem Manufacturing FRIGIDAIRE\u00ae, Dishwasher, Professional Series, PDSH4816AF",
+            "note": "Fuzzy match"
+          },
+          "char_limit": {
+            "field": "MOBILE_DESC",
+            "length": 76,
+            "limit": 80,
+            "compliant": true,
+            "value": "Rheem Manufacturing FRIGIDAIRE\u00ae, Dishwasher, Professional Series, PDSH4816AF"
+          }
+        },
+        "SHORT_DESC": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "FRIGIDAIRE\u00ae Professional Series PDSH4816AF Dishwasher With CleanBoost\u2122, Leg Mounting, 5-Wash Cycle, Stainless Steel",
+            "pred": "FRIGIDAIRE\u00ae Professional Series PDSH4816AF Dishwasher With CleanBoost\u2122, Leg Mounting, 5-Wash Cycle, Stainless Steel",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "SHORT_DESC",
+            "length": 115,
+            "limit": 200,
+            "compliant": true,
+            "value": "FRIGIDAIRE\u00ae Professional Series PDSH4816AF Dishwasher With CleanBoost\u2122, Leg Mounting, 5-Wash Cycle, "
+          }
+        },
+        "LONG_DESC1": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "FRIGIDAIRE\u00ae Dishwasher With CleanBoost\u2122, Professional Series, 5 Wash Cycles, 120 V, 15 A, Leg Mounting, 24 in W x 24-1/4 in D, 50-1/4 in Depth With Door Open, 8-1/2 in Upper Rack, 11-1/4 in Lower Rack Minimum Height, 10-3/8 in Upper Rack, 13-1/4 in Lower Rack Maximum Height, 47 dBA Sound Level, Stainless Steel, Additional Information: 240 kW-hr Annual Energy, 1 to 12 hr Delay Start Hours",
+            "pred": "FRIGIDAIRE\u00ae Dishwasher With CleanBoost\u2122, Professional Series, 5 Wash Cycles, 120 V, 15 A, Leg Mounting, 24 in W x 24-1/4 in D, 50-1/4 in Depth With Door Open, 8-1/2 in Upper Rack, 11-1/4 in Lower Rack Minimum Height, 10-3/8 in Upper Rack, 13-1/4 in Lower Rack Maximum Height, 47 dBA Sound Level, Stainless Steel, Additional Information: 240 kW-hr Annual Energy, 1 to 12 hr Delay Start Hours",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "LONG_DESC1",
+            "length": 390,
+            "limit": 2000,
+            "compliant": true,
+            "value": "FRIGIDAIRE\u00ae Dishwasher With CleanBoost\u2122, Professional Series, 5 Wash Cycles, 120 V, 15 A, Leg Mounti"
+          }
+        }
+      },
+      "attributes": {
+        "per_attribute": {
+          "Series": {
+            "gt_value": "Professional Series",
+            "gt_uom": "nan",
+            "pred_label": "Series",
+            "pred_value": "Professional Series",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Model": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Model",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Number of Wash Cycles": {
+            "gt_value": "5.0",
+            "gt_uom": "nan",
+            "pred_label": "Number of Wash Cycles",
+            "pred_value": "5.0",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Voltage Rating": {
+            "gt_value": "120",
+            "gt_uom": "V",
+            "pred_label": "Voltage Rating",
+            "pred_value": "120.0",
+            "pred_uom": "V",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Amperage Rating": {
+            "gt_value": "15",
+            "gt_uom": "A",
+            "pred_label": "Amperage Rating",
+            "pred_value": "15",
+            "pred_uom": "A",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Mounting Type": {
+            "gt_value": "Leg",
+            "gt_uom": "nan",
+            "pred_label": "Mounting Type",
+            "pred_value": "Leg",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Plug Type": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Plug Type",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Size": {
+            "gt_value": "24 in W x 24-1/4 in D",
+            "gt_uom": "nan",
+            "pred_label": "Size",
+            "pred_value": "24 in W x 24-1/4 in D",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Depth With Door Open": {
+            "gt_value": "50-1/4",
+            "gt_uom": "in",
+            "pred_label": "Depth With Door Open",
+            "pred_value": "50-1/4",
+            "pred_uom": "in",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Minimum Height": {
+            "gt_value": "8-1/2 in Upper Rack, 11-1/4 in Lower Rack",
+            "gt_uom": "nan",
+            "pred_label": "Minimum Height",
+            "pred_value": "8-1/2 in Upper Rack, 11-1/4 in Lower Rack",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Maximum Height": {
+            "gt_value": "10-3/8 in Upper Rack, 13-1/4 in Lower Rack",
+            "gt_uom": "nan",
+            "pred_label": "Maximum Height",
+            "pred_value": "10-3/8 in Upper Rack, 13-1/4 in Lower Rack",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Sound Level": {
+            "gt_value": "47",
+            "gt_uom": "dBA",
+            "pred_label": "Sound Level",
+            "pred_value": "47",
+            "pred_uom": "dBA",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Material": {
+            "gt_value": "Stainless Steel",
+            "gt_uom": "nan",
+            "pred_label": "Material",
+            "pred_value": "Stainless Steel",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Color": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Color",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Additional Information": {
+            "gt_value": "240 kW-hr Annual Energy, 1 to 12 hr Delay Start Hours",
+            "gt_uom": "nan",
+            "pred_label": "Additional Information",
+            "pred_value": "240 kW-hr Annual Energy, 1 to 12 hr Delay Start Hours",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          }
+        },
+        "summary": {
+          "matched": 15,
+          "total_gt_attributes": 15,
+          "total_pred_attributes": 17,
+          "precision": 0.8823529411764706,
+          "recall": 1.0,
+          "f1": 0.9375
+        }
+      }
+    },
+    "WDTS7024RZ": {
+      "key_fields": {
+        "MANUFACTURER_NAME": {
+          "match": true,
+          "score": 1.0,
+          "gt": "Whirlpool Corporation",
+          "pred": "Whirlpool Corporation",
+          "note": "Exact match (normalized)"
+        },
+        "BRAND_NAME": {
+          "match": true,
+          "score": 1.0,
+          "gt": "Whirlpool\u00ae",
+          "pred": "Whirlpool\u00ae",
+          "note": "Exact match (normalized)"
+        },
+        "MANUFACTURER_PART_NUMBER": {
+          "match": true,
+          "score": 1.0,
+          "gt": "WDTS7024RZ",
+          "pred": "WDTS7024RZ",
+          "note": "Exact match (normalized)"
+        },
+        "Classpath": {
+          "match": true,
+          "score": 1.0,
+          "gt": "Appliances & Consumer Electronics>Kitchen Appliances>Built-In Dishwashers",
+          "pred": "Appliances & Consumer Electronics>Kitchen Appliances>Built-In Dishwashers",
+          "note": "Exact match (normalized)"
+        },
+        "Product_Name": {
+          "match": true,
+          "score": 1.0,
+          "gt": "",
+          "pred": "",
+          "note": "Both empty"
+        }
+      },
+      "descriptions": {
+        "INVOICE_DESC": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "DISHWASHER BLTLN SST SST 120V 10A 41DBA",
+            "pred": "DISHWASHER BLTLN SST SST 120V 10A 41DBA",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "INVOICE_DESC",
+            "length": 39,
+            "limit": 40,
+            "compliant": true,
+            "value": "DISHWASHER BLTLN SST SST 120V 10A 41DBA"
+          }
+        },
+        "MOBILE_DESC": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "Whirlpool, Dishwasher, Eco Series, WDTS7024RZ, Built-in Mounting",
+            "pred": "Whirlpool, Dishwasher, Eco Series, WDTS7024RZ, Built-in Mounting",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "MOBILE_DESC",
+            "length": 64,
+            "limit": 80,
+            "compliant": true,
+            "value": "Whirlpool, Dishwasher, Eco Series, WDTS7024RZ, Built-in Mounting"
+          }
+        },
+        "SHORT_DESC": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "Whirlpool\u00ae Eco Series WDTS7024RZ Dishwasher, Built-in Mounting, Stainless Steel, Stainless Steel",
+            "pred": "Whirlpool\u00ae Eco Series WDTS7024RZ Dishwasher, Built-in Mounting, Stainless Steel, Stainless Steel",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "SHORT_DESC",
+            "length": 96,
+            "limit": 200,
+            "compliant": true,
+            "value": "Whirlpool\u00ae Eco Series WDTS7024RZ Dishwasher, Built-in Mounting, Stainless Steel, Stainless Steel"
+          }
+        },
+        "LONG_DESC1": {
+          "accuracy": {
+            "match": true,
+            "score": 1.0,
+            "gt": "Whirlpool\u00ae Dishwasher, Eco Series, 120 V, 10 A, Built-in Mounting, 33-7/16 in H x 23-7/8 in W x 22-5/8 in D, 50-3/16 in Depth With Door Open, 33-7/16 in Minimum Height, 41 dBA Sound Level, Stainless Steel, Stainless Steel, Additional Information: Folding Tines, Leak Detection System, Moisture Repellent Silverware Basket, Normal Cycle, Quick Wash Cycle, Sani Rinse Option, Sensor Cycle, Triple Wash Spray",
+            "pred": "Whirlpool\u00ae Dishwasher, Eco Series, 120 V, 10 A, Built-in Mounting, 33-7/16 in H x 23-7/8 in W x 22-5/8 in D, 50-3/16 in Depth With Door Open, 33-7/16 in Minimum Height, 41 dBA Sound Level, Stainless Steel, Stainless Steel, Additional Information: Folding Tines, Leak Detection System, Moisture Repellent Silverware Basket, Normal Cycle, Quick Wash Cycle, Sani Rinse Option, Sensor Cycle, Triple Wash Spray",
+            "note": "Exact match (normalized)"
+          },
+          "char_limit": {
+            "field": "LONG_DESC1",
+            "length": 405,
+            "limit": 2000,
+            "compliant": true,
+            "value": "Whirlpool\u00ae Dishwasher, Eco Series, 120 V, 10 A, Built-in Mounting, 33-7/16 in H x 23-7/8 in W x 22-5"
+          }
+        }
+      },
+      "attributes": {
+        "per_attribute": {
+          "Series": {
+            "gt_value": "Eco Series",
+            "gt_uom": "nan",
+            "pred_label": "Series",
+            "pred_value": "Eco Series",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Model": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Model",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Number of Wash Cycles": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Number of Wash Cycles",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Voltage Rating": {
+            "gt_value": "120",
+            "gt_uom": "V",
+            "pred_label": "Voltage Rating",
+            "pred_value": "120.0",
+            "pred_uom": "V",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Amperage Rating": {
+            "gt_value": "10",
+            "gt_uom": "A",
+            "pred_label": "Amperage Rating",
+            "pred_value": "10",
+            "pred_uom": "A",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Mounting Type": {
+            "gt_value": "Built-in",
+            "gt_uom": "nan",
+            "pred_label": "Mounting Type",
+            "pred_value": "Built-in",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Plug Type": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Plug Type",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Size": {
+            "gt_value": "33-7/16 in H x 23-7/8 in W x 22-5/8 in D",
+            "gt_uom": "nan",
+            "pred_label": "Size",
+            "pred_value": "33-7/16 in H x 23-7/8 in W x 22-5/8 in D",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Depth With Door Open": {
+            "gt_value": "50-3/16",
+            "gt_uom": "in",
+            "pred_label": "Depth With Door Open",
+            "pred_value": "50-3/16",
+            "pred_uom": "in",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Minimum Height": {
+            "gt_value": "33-7/16",
+            "gt_uom": "in",
+            "pred_label": "Minimum Height",
+            "pred_value": "33-7/16",
+            "pred_uom": "in",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Maximum Height": {
+            "gt_value": "nan",
+            "gt_uom": "nan",
+            "pred_label": "Maximum Height",
+            "pred_value": "nan",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Sound Level": {
+            "gt_value": "41",
+            "gt_uom": "dBA",
+            "pred_label": "Sound Level",
+            "pred_value": "41",
+            "pred_uom": "dBA",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Material": {
+            "gt_value": "Stainless Steel",
+            "gt_uom": "nan",
+            "pred_label": "Material",
+            "pred_value": "Stainless Steel",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Color": {
+            "gt_value": "Stainless Steel",
+            "gt_uom": "nan",
+            "pred_label": "Color",
+            "pred_value": "Stainless Steel",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          },
+          "Additional Information": {
+            "gt_value": "Folding Tines, Leak Detection System, Moisture Repellent Silverware Basket, Normal Cycle, Quick Wash Cycle, Sani Rinse Option, Sensor Cycle, Triple Wash Spray",
+            "gt_uom": "nan",
+            "pred_label": "Additional Information",
+            "pred_value": "Folding Tines, Leak Detection System, Moisture Repellent Silverware Basket, Normal Cycle, Quick Wash Cycle, Sani Rinse Option, Sensor Cycle, Triple Wash Spray",
+            "pred_uom": "nan",
+            "label_match": 1.0,
+            "value_match": 1.0,
+            "uom_match": 1.0,
+            "matched": true
+          }
+        },
+        "summary": {
+          "matched": 15,
+          "total_gt_attributes": 15,
+          "total_pred_attributes": 17,
+          "precision": 0.8823529411764706,
+          "recall": 1.0,
+          "f1": 0.9375
+        }
+      }
+    }
+  },
+  "aggregate": {
+    "descriptions": {
+      "INVOICE_DESC": {
+        "avg_score": 1.0,
+        "exact_matches": 2,
+        "total": 2
+      },
+      "MOBILE_DESC": {
+        "avg_score": 0.9966887417218542,
+        "exact_matches": 1,
+        "total": 2
+      },
+      "SHORT_DESC": {
+        "avg_score": 1.0,
+        "exact_matches": 2,
+        "total": 2
+      },
+      "LONG_DESC1": {
+        "avg_score": 1.0,
+        "exact_matches": 2,
+        "total": 2
+      }
+    },
+    "attributes": {
+      "matched": 30.0,
+      "total_gt": 30.0,
+      "total_pred": 34.0,
+      "precision": 0.8823529411764706,
+      "recall": 1.0,
+      "f1": 0.9375
+    },
+    "key_fields": {}
+  }
+}

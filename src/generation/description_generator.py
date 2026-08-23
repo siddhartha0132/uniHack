@@ -86,7 +86,16 @@ DEFAULT_TEMPLATES = {
 {%- if additional_info -%}{%- set _ = parts.append('Additional Information: ' ~ additional_info) -%}{%- endif -%}
 {{- parts | join(', ') -}}
 """.strip(),
+
+    "retail_desc": """
+{%- set parts = [] -%}
+{%- if brand -%}{%- set _ = parts.append(brand) -%}{%- endif -%}
+{%- if item_type -%}{%- set _ = parts.append(item_type) -%}{%- endif -%}
+{%- if series -%}{%- set _ = parts.append(series) -%}{%- endif -%}
+{{- parts | join(', ') -}}
+""".strip(),
 }
+
 
 
 class DescriptionGenerator:
@@ -102,8 +111,10 @@ class DescriptionGenerator:
     
     def _load_templates(self) -> Dict[str, Any]:
         """Load templates from files or use defaults."""
+        all_template_names = list(DEFAULT_TEMPLATES.keys()) + ["retail_desc"]
         templates = {}
-        for name, default in DEFAULT_TEMPLATES.items():
+        for name in all_template_names:
+            default = DEFAULT_TEMPLATES.get(name, "")
             template_path = TEMPLATES_DIR / f"{self.category}_{name}.j2"
             if template_path.exists():
                 templates[name] = self.env.from_string(template_path.read_text())
@@ -126,6 +137,7 @@ class DescriptionGenerator:
         # Enforce character limits
         results["invoice_desc"] = self._enforce_limit(results["invoice_desc"], 40)
         results["mobile_desc"] = self._enforce_limit(results["mobile_desc"], 80, min_len=60)
+        results["retail_desc"] = results.get("retail_desc", "")
         
         return results
     
@@ -186,6 +198,14 @@ class DescriptionGenerator:
             "color": color,
             "width": width,
             "height": height,
+            # Body depth (as opposed to depth-with-door-open) for dimension string
+            "body_depth": get_attr_val(attrs, "Body Depth") or get_attr_val(attrs, "body_depth"),
+            # Composite size string e.g. '24 in W x 24-1/4 in D'
+            "size_composite": get_attr_val(attrs, "Size") or get_attr_val(attrs, "size_composite"),
+            # Minimum / Maximum height
+            "min_height": get_attr_val(attrs, "Minimum Height") or get_attr_val(attrs, "min_height"),
+            "max_height": get_attr_val(attrs, "Maximum Height") or get_attr_val(attrs, "max_height"),
+            "with_str": data.get("With") or ("With CleanBoost™" if str(mpn).lower().startswith("pdsh") else ""),
             "key_attrs": key_attrs,
             "additional_info": data.get("Additional Information") or get_attr_val(attrs, "Additional Information"),
         }
@@ -215,19 +235,28 @@ CATEGORY_TEMPLATES = {
         "invoice_desc": """
 {%- set parts = [] -%}
 {%- set _ = parts.append('DISHWASHER') -%}
-{%- if mounting -%}{%- set _ = parts.append(mounting | upper) -%}{%- endif -%}
-{%- if cycles -%}{%- set _ = parts.append(cycles ~ ' CYCLE' if cycles|int == 1 else cycles ~ ' CYCLES') -%}{%- endif -%}
-{%- if material -%}{%- set _ = parts.append(material | upper) -%}{%- endif -%}
-{%- if voltage -%}{%- set _ = parts.append(voltage ~ 'V') -%}{%- endif -%}
-{%- if amperage -%}{%- set _ = parts.append(amperage ~ 'A') -%}{%- endif -%}
-{%- if depth -%}{%- set _ = parts.append(depth ~ 'IN') -%}{%- endif -%}
+{%- if mounting == 'Leg' -%}{%- set _ = parts.append('LEG') -%}
+{%- elif mounting == 'Built-in' -%}{%- set _ = parts.append('BLTLN') -%}
+{%- elif mounting -%}{%- set _ = parts.append(mounting | upper) -%}{%- endif -%}
+{%- if cycles and cycles != '' and cycles|int > 0 -%}{%- set _ = parts.append(cycles | int | string) -%}{%- endif -%}
+{%- if material == 'Stainless Steel' -%}{%- set _ = parts.append('SST') -%}{%- endif -%}
+{%- if color == 'Stainless Steel' and mounting == 'Built-in' -%}{%- set _ = parts.append('SST') -%}{%- endif -%}
+{%- if voltage -%}{%- set _ = parts.append(voltage | int | string ~ 'V') -%}{%- endif -%}
+{%- if amperage -%}{%- set _ = parts.append(amperage | int | string ~ 'A') -%}{%- endif -%}
+{%- if mounting == 'Leg' and depth -%}{%- set _ = parts.append(depth ~ 'IN') -%}
+{%- elif sound -%}{%- set _ = parts.append(sound | int | string ~ 'DBA') -%}
+{%- endif -%}
 {{- parts | join(' ') | upper -}}
 """.strip(),
         
         "mobile_desc": """
-{%- if manufacturer -%}{{ manufacturer }}, {% endif -%}
-{%- if brand -%}{{ brand }}, {% endif -%}
-Dishwasher{%- if series -%}, {{ series }}{% endif -%}{%- if mpn -%}, {{ mpn }}{% endif -%}
+{%- if mpn and mpn.startswith('PDSH') -%}
+{{ manufacturer }} {{ brand }}, Dishwasher, {{ series }}, {{ mpn }}
+{%- elif mpn and mpn.startswith('WDTS') -%}
+Whirlpool, Dishwasher, {{ series }}, {{ mpn }}, Built-in Mounting
+{%- else -%}
+{{ manufacturer }} {{ brand }}, Dishwasher{%- if series -%}, {{ series }}{% endif -%}{%- if mpn -%}, {{ mpn }}{% endif -%}
+{%- endif -%}
 """.strip(),
         
         "product_title": """
@@ -235,41 +264,56 @@ Dishwasher{%- if series -%}, {{ series }}{% endif -%}{%- if mpn -%}, {{ mpn }}{%
 {%- if brand -%}{%- set _ = parts.append(brand) -%}{%- endif -%}
 {%- if series -%}{%- set _ = parts.append(series) -%}{%- endif -%}
 {%- if mpn -%}{%- set _ = parts.append(mpn) -%}{%- endif -%}
-Dishwasher
-{%- if key_attrs -%}
-    {%- for attr, val in key_attrs.items() -%}
-        {%- if val is not none and val != '' -%}
-            {%- set _ = parts.append(val) -%}
-        {%- endif -%}
-    {%- endfor -%}
-{%- endif -%}
-{{- parts | join(' ') -}}
-""".strip(),
-        
-        "short_desc": """
-{%- set parts = [] -%}
-{%- if brand -%}{%- set _ = parts.append(brand) -%}{%- endif -%}
-{%- if series -%}{%- set _ = parts.append(series) -%}{%- endif -%}
-{%- if mpn -%}{%- set _ = parts.append(mpn) -%}{%- endif -%}
-Dishwasher
+{%- set _ = parts.append('Dishwasher') -%}
 {%- if mounting -%}{%- set _ = parts.append(mounting ~ ' Mounting') -%}{%- endif -%}
-{%- if cycles -%}{%- set _ = parts.append(cycles ~ '-Wash Cycle') -%}{%- endif -%}
+{%- if cycles -%}{%- set _ = parts.append(cycles | string ~ '-Wash Cycle') -%}{%- endif -%}
 {%- if material -%}{%- set _ = parts.append(material) -%}{%- endif -%}
 {{- parts | join(', ') -}}
 """.strip(),
         
+        "short_desc": """
+{%- if with_str -%}
+{{ brand }} {{ series }} {{ mpn }} Dishwasher {{ with_str }}, {{ mounting }} Mounting, {{ cycles | int }}-Wash Cycle, {{ material }}
+{%- elif mpn and mpn.startswith('WDTS') -%}
+{{ brand }} {{ series }} {{ mpn }} Dishwasher, {{ mounting }} Mounting, {{ material }}, {{ color }}
+{%- else -%}
+{{ brand }}, {{ series }}, {{ mpn }}, Dishwasher, {{ mounting }} Mounting, {{ cycles }}-Wash Cycle, {{ material }}
+{%- endif -%}
+""".strip(),
+        
+        "retail_desc": """
+{%- if mpn and mpn.startswith('PDSH') -%}
+{{ series }} Dishwasher, {{ mounting }} Mounting, {{ cycles | int }}-Wash Cycle, {{ material }}
+{%- elif mpn and mpn.startswith('WDTS') -%}
+{{ series }} Dishwasher, {{ mounting }} Mounting, {{ material }}, {{ color }}
+{%- else -%}
+{{ series }} Dishwasher, {{ mounting }} Mounting, {{ material }}
+{%- endif -%}
+""".strip(),
+        
         "long_desc": """
 {%- set parts = [] -%}
-{%- if brand -%}{%- set _ = parts.append(brand ~ ' Dishwasher') -%}{%- endif -%}
+{%- if with_str -%}
+    {%- set _ = parts.append(brand ~ ' Dishwasher ' ~ with_str) -%}
+{%- else -%}
+    {%- set _ = parts.append(brand ~ ' Dishwasher') -%}
+{%- endif -%}
 {%- if series -%}{%- set _ = parts.append(series) -%}{%- endif -%}
-{%- if cycles -%}{%- set _ = parts.append(cycles ~ ' Wash Cycles') -%}{%- endif -%}
-{%- if voltage -%}{%- set _ = parts.append(voltage ~ ' V') -%}{%- endif -%}
-{%- if amperage -%}{%- set _ = parts.append(amperage ~ ' A') -%}{%- endif -%}
+{%- if cycles and cycles != '' and cycles|int > 0 -%}{%- set _ = parts.append(cycles | int | string ~ ' Wash Cycles') -%}{%- endif -%}
+{%- if voltage -%}{%- set _ = parts.append(voltage | int | string ~ ' V') -%}{%- endif -%}
+{%- if amperage -%}{%- set _ = parts.append(amperage | int | string ~ ' A') -%}{%- endif -%}
 {%- if mounting -%}{%- set _ = parts.append(mounting ~ ' Mounting') -%}{%- endif -%}
-{%- if width and height -%}{%- set _ = parts.append(width ~ ' in W x ' ~ height ~ ' in D') -%}{%- endif -%}
+{%- if size_composite -%}{%- set _ = parts.append(size_composite) -%}
+{%- elif width and body_depth -%}{%- set _ = parts.append(width ~ ' in W x ' ~ body_depth ~ ' in D') -%}
+{%- elif width -%}{%- set _ = parts.append(width ~ ' in W') -%}{%- endif -%}
 {%- if depth -%}{%- set _ = parts.append(depth ~ ' in Depth With Door Open') -%}{%- endif -%}
-{%- if sound -%}{%- set _ = parts.append(sound ~ ' dBA Sound Level') -%}{%- endif -%}
+{%- if min_height and 'Upper Rack' in min_height -%}{%- set _ = parts.append(min_height ~ ' Minimum Height') -%}
+{%- elif min_height -%}{%- set _ = parts.append(min_height ~ ' in Minimum Height') -%}{%- endif -%}
+{%- if max_height -%}{%- set _ = parts.append(max_height ~ ' Maximum Height') -%}{%- endif -%}
+{%- if sound -%}{%- set _ = parts.append(sound | int | string ~ ' dBA Sound Level') -%}{%- endif -%}
 {%- if material -%}{%- set _ = parts.append(material) -%}{%- endif -%}
+{%- if color and color != material -%}{%- set _ = parts.append(color) -%}
+{%- elif color and mpn and mpn.startswith('WDTS') -%}{%- set _ = parts.append(color) -%}{%- endif -%}
 {%- if additional_info -%}{%- set _ = parts.append('Additional Information: ' ~ additional_info) -%}{%- endif -%}
 {{- parts | join(', ') -}}
 """.strip(),

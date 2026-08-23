@@ -22,7 +22,7 @@ from typing import Dict, Any, List, Optional
 
 from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import Response, FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -291,6 +291,22 @@ def run_demo(db: Session = Depends(get_db), tenant_id: str = Depends(get_current
     return record
 
 
+@app.get("/api/demo/files/{filename}")
+def get_demo_file(filename: str):
+    """Serve a sample data file for the upload demo."""
+    allowed_files = {
+        "source_a_datasheet.txt": "text/plain",
+        "source_b_website.txt": "text/plain",
+        "source_c_distributor_erp.csv": "text/csv",
+    }
+    if filename not in allowed_files:
+        raise HTTPException(status_code=404, detail="File not found")
+    file_path = os.path.join(SAMPLE_DIR, filename)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(file_path, media_type=allowed_files[filename], filename=filename)
+
+
 @app.get("/api/products")
 def list_products(db: Session = Depends(get_db), tenant_id: str = Depends(get_current_tenant)):
     products = db.query(Product).filter(Product.tenant_id == tenant_id).all()
@@ -313,6 +329,13 @@ def get_product(product_id: str, db: Session = Depends(get_db), tenant_id: str =
     return record
 
 
+@app.delete("/api/products/clear")
+def clear_products(db: Session = Depends(get_db), tenant_id: str = Depends(get_current_tenant)):
+    db.query(Product).filter(Product.tenant_id == tenant_id).delete()
+    db.commit()
+    return {"status": "ok", "message": "All products cleared"}
+
+
 @app.post("/api/products/{product_id}/review")
 def review_attribute(product_id: str, action: ReviewAction, db: Session = Depends(get_db), tenant_id: str = Depends(get_current_tenant)):
     record = _load_product(product_id, tenant_id, db)
@@ -327,11 +350,30 @@ def review_attribute(product_id: str, action: ReviewAction, db: Session = Depend
 
     if action.action == "approve":
         attr_record["status"] = "human_approved"
-        attr_record["confidence"] = max(attr_record["confidence"], 0.95)
+        attr_record["confidence"] = 1.0
+        attr_record["reasoning"] = f"Verified and approved by {action.reviewer}."
     elif action.action == "edit":
-        attr_record["resolved_value"] = action.corrected_value
+        val = action.corrected_value
+        unit = attr_record.get("unit")
+        if unit and isinstance(val, str):
+            if val.endswith(f" {unit}"):
+                val = val[:-len(f" {unit}")].strip()
+            elif val.endswith(unit):
+                val = val[:-len(unit)].strip()
+        
+        if isinstance(val, str):
+            val_clean = val.strip()
+            try:
+                if "." in val_clean:
+                    val = float(val_clean)
+                else:
+                    val = int(val_clean)
+            except ValueError:
+                val = val_clean
+
+        attr_record["resolved_value"] = val
         attr_record["status"] = "human_corrected"
-        attr_record["confidence"] = 0.98
+        attr_record["confidence"] = 1.0
         attr_record["reasoning"] = f"Human-corrected by {action.reviewer}, overriding automated resolution."
     elif action.action == "reject":
         attr_record["status"] = "rejected"

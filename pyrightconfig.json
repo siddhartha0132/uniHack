@@ -9,13 +9,12 @@
         "**/debug_*.py",
         "**/check_*.py",
         "run_pipeline.py",
-        "**/test_*.py",
         "**/__pycache__/**",
         ".venv/**",
         ".vscode/**"
     ],
     "pythonVersion": "3.11",
-    "pythonPlatform": "Windows",
+    "pythonPlatform": "Darwin",
     "venvPath": "backend/.venv",
     "venv": ".venv",
     "extraPaths": [
@@ -31,9 +30,5 @@
     "reportOptionalMemberAccess": false,
     "reportOptionalSubscript": false,
     "reportOptionalIterable": false,
-    "reportPrivateImportUsage": false,
-    "pythonVersion": "3.11",
-    "pythonPlatform": "Windows",
-    "venvPath": "backend/.venv",
-    "venv": ".venv"
+    "reportPrivateImportUsage": false
 }

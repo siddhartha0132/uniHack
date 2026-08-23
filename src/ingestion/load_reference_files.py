@@ -10,7 +10,7 @@ from typing import Dict, Any
 
 
 # Use absolute path to project root
-PROJECT_ROOT = Path(r"C:\Users\goels\uniHack")
+PROJECT_ROOT = Path(__file__).parents[2]
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)

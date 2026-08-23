@@ -3,7 +3,7 @@ import { api } from "../api/client";
 
 const FORMATS = [
   { value: "json",       label: "Generic JSON",   desc: "Flat JSON — resolved values + confidence, no internal fields" },
-  { value: "akeneo_csv", label: "Akeneo CSV",      desc: "Akeneo-compatible CSV import format for B2B PIM systems" },
+  { value: "akeneo_csv", label: "CSV",            desc: "Structured CSV export format for PIM/ERP systems" },
 ];
 
 export default function ExportPanel({ productId }) {

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Optional, Tuple, Dict, Any
 import re
 
-PROJECT_ROOT = Path(r"C:\Users\goels\uniHack")
+PROJECT_ROOT = Path(__file__).parents[2]
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
@@ -120,8 +120,21 @@ class ManufacturerBrandResolver:
         return re.sub(r'\s+', ' ', s).strip()
     
     def _clean_brand_string(self, s: str) -> str:
-        s = re.sub(r'\b(®|™|©)\b', '', s)
+        # Strip symbols only for matching — canonical form preserves them
+        s = re.sub(r'[®™©]', '', s)
         return re.sub(r'\s+', ' ', s).strip()
+    
+    def _get_canonical_brand_with_symbols(self, clean_brand: str, manufacturer: str) -> str:
+        """Retrieve canonical brand name with ® / ™ symbols from the reference list."""
+        if self.mfr_df is None or self.mfr_df.empty:
+            return clean_brand
+        # Look for exact match of stripped brand in the mfr list
+        for _, row in self.mfr_df.iterrows():
+            canonical = str(row.get('BRAND_NAME', '')).strip()
+            stripped = re.sub(r'[®™©]', '', canonical).strip()
+            if stripped.lower() == clean_brand.lower():
+                return canonical
+        return clean_brand
 
 
 def resolve_row(row: pd.Series, resolver: ManufacturerBrandResolver) -> Dict[str, Any]:
@@ -170,20 +183,20 @@ def resolve_row(row: pd.Series, resolver: ManufacturerBrandResolver) -> Dict[str
     
     # Appliance brands
     appliance_brands = {
-        'frigidaire': ('Rheem Manufacturing', 'FRIGIDAIRE'),
-        'whirlpool': ('Whirlpool Corporation', 'Whirlpool'),
-        'kitchenaid': ('Whirlpool Corporation', 'KitchenAid'),
-        'kitchen aid': ('Whirlpool Corporation', 'KitchenAid'),
-        'ge ': ('GE Appliances', 'GE'),
-        'ge profile': ('GE Appliances', 'GE Profile'),
-        'monogram': ('GE Appliances', 'Monogram'),
-        'lg ': ('LG Electronics', 'LG'),
-        'lg signature': ('LG Electronics', 'LG Signature'),
-        'bosch': ('Bosch', 'Bosch'),
-        'samsung': ('Samsung', 'Samsung'),
-        'maytag': ('Whirlpool Corporation', 'Maytag'),
-        'amana': ('Whirlpool Corporation', 'Amana'),
-        'hotpoint': ('GE Appliances', 'Hotpoint'),
+        'frigidaire': ('Rheem Manufacturing', 'FRIGIDAIRE®'),
+        'whirlpool': ('Whirlpool Corporation', 'Whirlpool®'),
+        'kitchenaid': ('Whirlpool Corporation', 'KitchenAid®'),
+        'kitchen aid': ('Whirlpool Corporation', 'KitchenAid®'),
+        'ge ': ('GE Appliances', 'GE®'),
+        'ge profile': ('GE Appliances', 'GE Profile®'),
+        'monogram': ('GE Appliances', 'Monogram®'),
+        'lg ': ('LG Electronics', 'LG®'),
+        'lg signature': ('LG Electronics', 'LG Signature®'),
+        'bosch': ('Bosch', 'Bosch®'),
+        'samsung': ('Samsung', 'Samsung®'),
+        'maytag': ('Whirlpool Corporation', 'Maytag®'),
+        'amana': ('Whirlpool Corporation', 'Amana®'),
+        'hotpoint': ('GE Appliances', 'Hotpoint®'),
     }
     
     # Abrasive/tool brands (extract from description)
@@ -207,14 +220,14 @@ def resolve_row(row: pd.Series, resolver: ManufacturerBrandResolver) -> Dict[str
     
     # MPN prefix to brand mapping (for dishwashers where brand not in description)
     mpn_prefix_brands = {
-        'pdsh': ('Rheem Manufacturing', 'FRIGIDAIRE'),
-        'pdt': ('GE Appliances', 'GE'),
-        'ldph': ('LG Electronics', 'LG'),
-        'wdts': ('Whirlpool Corporation', 'Whirlpool'),
-        'pdd': ('GE Appliances', 'GE'),
-        'kdts': ('Whirlpool Corporation', 'KitchenAid'),
-        'kdps': ('Whirlpool Corporation', 'KitchenAid'),
-        'kdfm': ('Appliance Dealers Cooperative', 'FRIGIDAIRE'),
+        'pdsh': ('Rheem Manufacturing', 'FRIGIDAIRE®'),
+        'pdt': ('GE Appliances', 'GE®'),
+        'ldph': ('LG Electronics', 'LG®'),
+        'wdts': ('Whirlpool Corporation', 'Whirlpool®'),
+        'pdd': ('GE Appliances', 'GE®'),
+        'kdts': ('Whirlpool Corporation', 'KitchenAid®'),
+        'kdps': ('Whirlpool Corporation', 'KitchenAid®'),
+        'kdfm': ('Whirlpool Corporation', 'KitchenAid®'),
     }
     
     inferred_mfr = None
@@ -264,18 +277,27 @@ def resolve_row(row: pd.Series, resolver: ManufacturerBrandResolver) -> Dict[str
         if b_conf > brand_conf:
             canon_brand, brand_code, brand_conf = b_name, b_code, b_conf
     
-    # If no brand resolved, check if we have an inferred brand from description
-    if not canon_brand and inferred_brand:
-        canon_brand = inferred_brand
-        brand_conf = 0.75
-        # Find brand code
-        if canon_mfr and resolver.mfr_df is not None and not resolver.mfr_df.empty:
-            brand_row = resolver.mfr_df[
-                (resolver.mfr_df["MANUFACTURER_NAME"] == canon_mfr) & 
-                (resolver.mfr_df["BRAND_NAME"] == canon_brand)
-            ]
-            if not brand_row.empty:
-                brand_code = brand_row.iloc[0].get("BRAND_CODE")
+    # If we have an inferred_brand from the hardcoded map (which already has ® symbol),
+    # prefer it if the fuzzy-matched brand is missing the ® or has lower confidence
+    if inferred_brand:
+        # Always use inferred_brand if it has a ® symbol that the fuzzy match lost
+        import re as _re
+        inferred_stripped = _re.sub(r'[®™©]', '', inferred_brand).strip()
+        canon_stripped = _re.sub(r'[®™©]', '', canon_brand or '').strip()
+        if inferred_stripped.lower() == canon_stripped.lower() and '\u00ae' in inferred_brand:
+            # Same brand, but inferred has ® — use inferred
+            canon_brand = inferred_brand
+        elif not canon_brand:
+            canon_brand = inferred_brand
+            brand_conf = 0.75
+            # Find brand code
+            if canon_mfr and resolver.mfr_df is not None and not resolver.mfr_df.empty:
+                brand_row = resolver.mfr_df[
+                    (resolver.mfr_df["MANUFACTURER_NAME"] == canon_mfr) &
+                    (resolver.mfr_df["BRAND_NAME"].str.replace(r'[®™©]', '', regex=True).str.strip() == inferred_stripped)
+                ]
+                if not brand_row.empty:
+                    brand_code = brand_row.iloc[0].get("BRAND_CODE")
     
     # Don't default to first brand of manufacturer - only use explicit hints
     # (removed the fallback to first brand)

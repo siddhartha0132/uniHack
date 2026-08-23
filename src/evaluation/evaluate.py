@@ -8,7 +8,7 @@ from typing import Dict, List, Any, Tuple
 from rapidfuzz import fuzz
 import json
 
-PROJECT_ROOT = Path(r"C:\Users\goels\uniHack")
+PROJECT_ROOT = Path(__file__).parents[2]
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 GROUND_TRUTH_DIR = PROJECT_ROOT / "data" / "ground_truth"
 
@@ -140,44 +140,35 @@ def evaluate_attributes(gt_row: pd.Series, pred_row: pd.Series) -> Dict[str, Any
     total_gt = 0
     total_pred = 0
     
-    # Try both underscore and space formats for ground truth
-    def get_gt_field(row, base, i):
-        # Try space format first (ground truth), then underscore (pipeline output)
+    # Helper to get field with space or underscore
+    def get_attr_val(row, base, i):
         space_key = f"{base} {i}"
         underscore_key = f"{base}_{i}"
         if space_key in row.index:
             return row.get(space_key, "")
         return row.get(underscore_key, "")
     
-    for i in range(1, 24):
-        label_field = f"ATTRIBUTE_LABEL_{i}"
-        value_field = f"ATTRIBUTE_VALUE_{i}"
-        uom_field = f"ATTRIBUTE_UOM_{i}"
+    for i in range(1, 51):
+        gt_label = str(get_attr_val(gt_row, "ATTRIBUTE_LABEL", i)).strip()
+        gt_value = str(get_attr_val(gt_row, "ATTRIBUTE_VALUE", i)).strip()
+        gt_uom = str(get_attr_val(gt_row, "ATTRIBUTE_UOM", i)).strip()
         
-        gt_label = str(get_gt_field(gt_row, "ATTRIBUTE_LABEL", i)).strip()
-        gt_value = str(get_gt_field(gt_row, "ATTRIBUTE_VALUE", i)).strip()
-        gt_uom = str(get_gt_field(gt_row, "ATTRIBUTE_UOM", i)).strip()
-        
-        pred_label = str(pred_row.get(label_field, "")).strip()
-        pred_value = str(pred_row.get(value_field, "")).strip()
-        pred_uom = str(pred_row.get(uom_field, "")).strip()
-        
-        if gt_label:
+        if gt_label and gt_label != "nan":
             total_gt += 1
             # Find matching attribute in prediction
             best_match = None
             best_score = 0
-            for j in range(1, 24):
-                p_label = str(pred_row.get(f"ATTRIBUTE_LABEL_{j}", "")).strip()
-                if p_label:
+            for j in range(1, 51):
+                p_label = str(get_attr_val(pred_row, "ATTRIBUTE_LABEL", j)).strip()
+                if p_label and p_label != "nan":
                     score = fuzz.ratio(gt_label.lower(), p_label.lower()) / 100.0
                     if score > best_score:
                         best_score = score
                         best_match = j
             
             if best_match and best_score >= 0.8:
-                p_value = str(pred_row.get(f"ATTRIBUTE_VALUE_{best_match}", "")).strip()
-                p_uom = str(pred_row.get(f"ATTRIBUTE_UOM_{best_match}", "")).strip()
+                p_value = str(get_attr_val(pred_row, "ATTRIBUTE_VALUE", best_match)).strip()
+                p_uom = str(get_attr_val(pred_row, "ATTRIBUTE_UOM", best_match)).strip()
                 
                 value_match = fuzz.ratio(normalize_value(gt_value), normalize_value(p_value)) / 100.0 if gt_value and p_value else 0
                 uom_match = fuzz.ratio(normalize_value(gt_uom), normalize_value(p_uom)) / 100.0 if gt_uom and p_uom else 0
@@ -186,10 +177,11 @@ def evaluate_attributes(gt_row: pd.Series, pred_row: pd.Series) -> Dict[str, Any
                 if attr_match:
                     matched += 1
                 
+                p_label_matched = str(get_attr_val(pred_row, "ATTRIBUTE_LABEL", best_match)).strip()
                 results[gt_label] = {
                     "gt_value": gt_value,
                     "gt_uom": gt_uom,
-                    "pred_label": pred_label,
+                    "pred_label": p_label_matched,
                     "pred_value": p_value,
                     "pred_uom": p_uom,
                     "label_match": best_score,
@@ -205,7 +197,9 @@ def evaluate_attributes(gt_row: pd.Series, pred_row: pd.Series) -> Dict[str, Any
                     "note": "Label not found in prediction",
                 }
         
-        if pred_label:
+    for i in range(1, 51):
+        p_lbl = str(get_attr_val(pred_row, "ATTRIBUTE_LABEL", i)).strip()
+        if p_lbl and p_lbl != "nan":
             total_pred += 1
     
     precision = matched / total_pred if total_pred > 0 else 0

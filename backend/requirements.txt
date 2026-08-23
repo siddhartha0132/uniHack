@@ -3,7 +3,7 @@ uvicorn[standard]==0.30.6
 pydantic==2.9.2
 
 # Phase 1 — File upload
-pymupdf==1.24.7
+pymupdf==1.25.4
 python-multipart==0.0.12
 
 # Phase 2 — LLM extraction fallback

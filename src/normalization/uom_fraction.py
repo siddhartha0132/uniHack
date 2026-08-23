@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Optional, Dict, Tuple
 import re
 
-PROJECT_ROOT = Path(r"C:\Users\goels\uniHack")
+PROJECT_ROOT = Path(__file__).parents[2]
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 

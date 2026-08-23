@@ -1,0 +1,267 @@
+INFO:     Will watch for changes in these directories: ['/Users/shashwat/unihack/uniHack/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [58137] using WatchFiles
+INFO:     Started server process [58151]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54716 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54717 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54718 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54719 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54720 - "DELETE /api/products/clear HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54723 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54724 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54849 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54853 - "OPTIONS /api/demo/run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54853 - "GET /api/demo/run HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:54854 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54854 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54854 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54854 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54885 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54885 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54885 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54885 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54885 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54887 - "GET /api/demo/run HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:54887 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54887 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54887 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54887 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54906 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54906 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54906 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54906 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54927 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54928 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54928 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54928 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54928 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54953 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54953 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54953 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54953 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54953 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55020 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55020 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55020 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55020 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55021 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55021 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55021 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55021 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55026 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55026 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55026 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55026 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55031 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55031 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55031 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55031 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55038 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55038 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55038 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55038 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55039 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55039 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55039 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55039 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55052 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55052 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55052 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55052 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55052 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55052 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55089 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55089 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55089 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55089 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55093 - "GET /api/demo/files/source_a_datasheet.txt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55093 - "GET /api/demo/files/source_b_website.txt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55093 - "GET /api/demo/files/source_c_distributor_erp.csv HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55128 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55128 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55128 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55128 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55166 - "OPTIONS /api/ingest/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55166 - "POST /api/ingest/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55166 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55166 - "OPTIONS /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55167 - "OPTIONS /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55166 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55167 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55167 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55167 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55168 - "OPTIONS /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55168 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55168 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55168 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55172 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55175 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55178 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55178 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55178 - "GET /api/products HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58151]
+INFO:     Started server process [59508]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/arbitration.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [59508]
+INFO:     Started server process [59516]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:55206 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55207 - "GET /api/demo/run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55208 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55209 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55210 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55211 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55212 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55213 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55219 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55219 - "OPTIONS /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55219 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55219 - "OPTIONS /api/products/clear HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "DELETE /api/products/clear HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55218 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55230 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55230 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55230 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55230 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55268 - "POST /api/ingest/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55268 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55268 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55268 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55269 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55269 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55278 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55278 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55278 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55279 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55279 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55279 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55285 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55285 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55285 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55285 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55285 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55291 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55291 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55291 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55291 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55292 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55292 - "OPTIONS /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55291 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55291 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55292 - "GET /api/products HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [59516]
+INFO:     Started server process [59656]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:55334 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55335 - "GET /api/demo/run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55336 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55342 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55342 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55342 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55342 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55343 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55343 - "OPTIONS /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55342 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55342 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55343 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55346 - "OPTIONS /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55346 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55346 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55346 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55346 - "DELETE /api/products/clear HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55346 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55360 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55360 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55360 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55360 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55368 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55368 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55368 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55368 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "OPTIONS /api/ingest/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "POST /api/ingest/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55407 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55406 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55417 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55417 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55417 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55421 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55421 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55421 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55426 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55426 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55426 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55440 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55440 - "OPTIONS /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55440 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55440 - "OPTIONS /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55440 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "OPTIONS /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "POST /api/products/6ES7214-1AG40-0XB0/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "GET /api/products/6ES7214-1AG40-0XB0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55443 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55444 - "OPTIONS /api/products/6ES7214-1AG40-0XB0/ask?q=What%20is%20the%20Operating%20Temperature%20range%3F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55444 - "GET /api/products/6ES7214-1AG40-0XB0/ask?q=What%20is%20the%20Operating%20Temperature%20range%3F HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55454 - "OPTIONS /api/products/6ES7214-1AG40-0XB0/export?format=akeneo_csv HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55454 - "GET /api/products/6ES7214-1AG40-0XB0/export?format=akeneo_csv HTTP/1.1" 200 OK

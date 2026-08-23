@@ -69,6 +69,7 @@ class Product(Base):
             "sources":        self.sources_json or [],
             "review_log":     self.review_log_json or [],
             "version":        self.version,
+            "tenant_id":      self.tenant_id,
         }
 
     @classmethod

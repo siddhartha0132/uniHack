@@ -170,18 +170,22 @@ def compute_quality_score(resolved: Dict[str, Any], expected_attributes: List[st
         avg_confidence = 0.0
 
     conflicts = [a for a, r in resolved.items() if r["status"] in ("resolved_conflict", "unresolved_conflict")]
-    needs_review = [a for a, r in resolved.items() if r["status"] == "unresolved_conflict" or r["confidence"] < 0.75]
+    needs_review = [a for a, r in resolved.items() if r["status"] == "unresolved_conflict" or (r["status"] not in ("human_approved", "human_corrected") and r["confidence"] < 0.75)]
 
     overall = round(0.5 * completeness + 0.5 * avg_confidence, 1)
 
     missing = [a for a in expected_attributes if a not in found]
+    human_verified = [a for a, r in resolved.items() if r["status"] in ("human_approved", "human_corrected")]
 
-    explanation = (
-        f"{len(found)}/{len(expected_attributes)} expected attributes found. "
-        f"{len(resolved) - len(conflicts)}/{len(resolved)} attributes agreed across sources without conflict. "
-        f"{len(conflicts)} conflict(s) detected and resolved by source reliability. "
-        f"{len(needs_review)} attribute(s) flagged for human review."
-    )
+    if len(human_verified) == len(expected_attributes) and not missing:
+        explanation = "All expected attributes verified and approved by human review. 100% complete with maximum confidence."
+    else:
+        explanation = (
+            f"{len(found)}/{len(expected_attributes)} expected attributes found. "
+            f"{len(resolved) - len(conflicts)}/{len(resolved)} attributes agreed across sources without conflict. "
+            f"{len(conflicts)} conflict(s) detected and resolved by source reliability. "
+            f"{len(needs_review)} attribute(s) flagged for human review."
+        )
 
     return {
         "overall_score": overall,
