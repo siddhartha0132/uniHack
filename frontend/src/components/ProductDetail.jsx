@@ -24,30 +24,60 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
 
   if (!product) {
     return (
-      <div className="detail-panel" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div className="detail-empty">
-          <p className="eyebrow" style={{ textAlign: "center", margin: 0 }}>Getting Started</p>
-          <h1 style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 700, textAlign: "center", margin: "8px 0 14px" }}>
-            Select a product or Click Enter Demo Data
-          </h1>
-          <p style={{ fontSize: 14, color: "var(--text-primary)", textAlign: "center", lineHeight: 1.6, maxWidth: 540, margin: "0 auto 10px", textWrap: "balance" }}>
-            Click on <strong>"Enter Demo Data"</strong> in the top navigation bar to upload your source files or load the 3 sample sources.
+      <div className="detail-panel">
+        <p className="eyebrow">Getting Started</p>
+        <h1 className="detail-title">Product Resolution & Arbitration</h1>
+
+        <div className="card" style={{ padding: "24px 28px", marginBottom: "24px" }}>
+          <p style={{ fontSize: "14px", color: "var(--text-primary)", lineHeight: "1.6", marginBottom: "20px" }}>
+            Select a product from the sidebar to inspect its evidence ledger, or run the pipeline using one of the options below:
           </p>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", textAlign: "center", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 20px", textWrap: "balance" }}>
-            The demo dataset features a Siemens PLC SKU sourced from three genuinely conflicting sources — a technical datasheet, a manufacturer product page, and a distributor ERP export. Watch the Veritas engine arbitrate conflicts with full traceable evidence.
-          </p>
-          {onOpenIngest && (
-            <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-              <button className="btn btn-primary btn-sm" onClick={onOpenIngest}>
-                📋 Enter Demo Data
-              </button>
+
+          <div className="action-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "20px" }}>
+            <div style={{ background: "var(--bg-subtle)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "18px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "14px" }}>
+              <div>
+                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "6px" }}>
+                  1. Run Demo Pipeline
+                </h3>
+                <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: "1.5", margin: 0 }}>
+                  Instantly execute conflict arbitration on the Siemens PLC dataset across 3 conflicting sources (Datasheet, Product Page, Distributor ERP).
+                </p>
+              </div>
               {onRunDemo && (
-                <button className="btn btn-ghost btn-sm" onClick={onRunDemo} style={{ border: "1px solid var(--border)" }}>
-                  ⚡ Run Demo Pipeline
+                <button className="btn btn-primary btn-sm" onClick={onRunDemo} style={{ alignSelf: "flex-start" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  Run Demo Pipeline
                 </button>
               )}
             </div>
-          )}
+
+            <div style={{ background: "var(--bg-subtle)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "18px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "14px" }}>
+              <div>
+                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "6px" }}>
+                  2. Enter Demo Data / Custom Sources
+                </h3>
+                <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: "1.5", margin: 0 }}>
+                  Upload your own PDF, CSV, or text files, or inspect and modify raw source inputs before triggering arbitration.
+                </p>
+              </div>
+              {onOpenIngest && (
+                <button className="btn btn-secondary btn-sm" onClick={onOpenIngest} style={{ alignSelf: "flex-start", border: "1px solid var(--border)" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  Enter Demo Data
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div style={{ borderTop: "1px solid var(--border-soft)", paddingTop: "14px" }}>
+            <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0, fontFamily: "var(--font-mono)" }}>
+              The demo dataset features a Siemens PLC SKU (6ES7214-1AG40-0XB0) sourced from three genuinely conflicting sources. Veritas extracts physical specifications and arbitrates true values with full evidence provenance and Bayesian reliability learning.
+            </p>
+          </div>
         </div>
       </div>
     );
