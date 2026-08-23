@@ -31,7 +31,36 @@ function AppInner() {
   const handleRunDemo = useCallback(async () => {
     setDemoRunning(true);
     try {
-      const result = await api.runDemo();
+      let result;
+      try {
+        result = await api.runDemo();
+      } catch (err) {
+        // Direct ingest fallback with the 3 demo sources
+        result = await api.ingest({
+          product_name: "SIMATIC S7-1200 CPU 1214C",
+          product_id: "6ES7214-1AG40-0XB0",
+          sources: [
+            {
+              source_id: "source_a",
+              source_type: "datasheet",
+              format: "text",
+              raw_content: `SIEMENS SIMATIC S7-1200 CPU 1214C\nTechnical Datasheet — Document No. 6ES7214-1AG40-0XB0\nPage 24 — Technical specifications\n\nSupply voltage: rated 24 V DC, operating range 20.4 V DC to 28.8 V DC\nDigital inputs: 14 x 24 V DC\nDigital outputs: 10 x relay, 2 A\nWeight: approximately 1.35 kg (including front connectors)\nAmbient temperature during operation: -20 C to +60 C\nDegree of protection: IP20\nWork memory: 100 KB\nCommunication: PROFINET, Ethernet\nDimensions (W x H x D): 110 mm x 100 mm x 75 mm`
+            },
+            {
+              source_id: "source_b",
+              source_type: "manufacturer_website",
+              format: "text",
+              raw_content: `Product page — siemens.com/simatic-s7-1200\nSIMATIC S7-1200, CPU 1214C\n\nCompact PLC for small to medium automation tasks.\nInput voltage: 24V DC\nWeight: 1.2 kg\nOperating temperature: -20C to 60C\nProtection class: IP20\nDigital I/O: 14 DI / 10 DO\nEthernet interface: yes, PROFINET supported\nMemory: 100 KB work memory\n\nBuy now or find a distributor near you.`
+            },
+            {
+              source_id: "source_c",
+              source_type: "distributor_erp",
+              format: "csv",
+              raw_content: `sku,description,voltage,weight_kg,temp_range,protection,memory_kb\n6ES7214-1AG40-0XB0,SIMATIC S7-1200 CPU 1214C PLC,24VDC,1.4,-20 to 55 C,IP20,100`
+            }
+          ]
+        });
+      }
       await refreshProducts();
       await loadProduct(result.product_id);
       toast("Demo pipeline complete!", "success");

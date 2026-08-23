@@ -280,12 +280,54 @@ def ingest_discover(req: IngestRequest, db: Session = Depends(get_db), tenant_id
     return record
 
 
+EMBEDDED_SAMPLES = {
+    "source_a_datasheet.txt": """SIEMENS SIMATIC S7-1200 CPU 1214C
+Technical Datasheet — Document No. 6ES7214-1AG40-0XB0
+Page 24 — Technical specifications
+
+Supply voltage: rated 24 V DC, operating range 20.4 V DC to 28.8 V DC
+Digital inputs: 14 x 24 V DC
+Digital outputs: 10 x relay, 2 A
+Weight: approximately 1.35 kg (including front connectors)
+Ambient temperature during operation: -20 C to +60 C
+Degree of protection: IP20
+Work memory: 100 KB
+Communication: PROFINET, Ethernet
+Dimensions (W x H x D): 110 mm x 100 mm x 75 mm
+""",
+    "source_b_website.txt": """Product page — siemens.com/simatic-s7-1200
+SIMATIC S7-1200, CPU 1214C
+
+Compact PLC for small to medium automation tasks.
+Input voltage: 24V DC
+Weight: 1.2 kg
+Operating temperature: -20C to 60C
+Protection class: IP20
+Digital I/O: 14 DI / 10 DO
+Ethernet interface: yes, PROFINET supported
+Memory: 100 KB work memory
+
+Buy now or find a distributor near you.
+""",
+    "source_c_distributor_erp.csv": """sku,description,voltage,weight_kg,temp_range,protection,memory_kb
+6ES7214-1AG40-0XB0,SIMATIC S7-1200 CPU 1214C PLC,24VDC,1.4,-20 to 55 C,IP20,100
+""",
+}
+
+
 @app.get("/api/demo/run")
 def run_demo(db: Session = Depends(get_db), tenant_id: str = Depends(get_current_tenant)):
     """Convenience endpoint: runs the pipeline on the bundled sample dataset."""
     def read(fname):
-        with open(os.path.join(SAMPLE_DIR, fname), "r") as f:
-            return f.read()
+        for dir_candidate in [SAMPLE_DIR, os.path.join(os.getcwd(), "backend", "app", "sample_data"), os.path.join(os.getcwd(), "app", "sample_data")]:
+            fpath = os.path.join(dir_candidate, fname)
+            if os.path.exists(fpath):
+                try:
+                    with open(fpath, "r") as f:
+                        return f.read()
+                except Exception:
+                    pass
+        return EMBEDDED_SAMPLES.get(fname, "")
 
     sources = [
         SourceInput(

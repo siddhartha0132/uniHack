@@ -103,6 +103,57 @@ export default function IngestModal({ onClose, onSuccess }) {
     }
   };
 
+  const handleLoadDemoData = () => {
+    setProductName("SIMATIC S7-1200 CPU 1214C");
+    setProductId("6ES7214-1AG40-0XB0");
+    setSources([
+      {
+        source_id: "source_a",
+        source_type: "datasheet",
+        format: "text",
+        raw_content: `SIEMENS SIMATIC S7-1200 CPU 1214C
+Technical Datasheet — Document No. 6ES7214-1AG40-0XB0
+Page 24 — Technical specifications
+
+Supply voltage: rated 24 V DC, operating range 20.4 V DC to 28.8 V DC
+Digital inputs: 14 x 24 V DC
+Digital outputs: 10 x relay, 2 A
+Weight: approximately 1.35 kg (including front connectors)
+Ambient temperature during operation: -20 C to +60 C
+Degree of protection: IP20
+Work memory: 100 KB
+Communication: PROFINET, Ethernet
+Dimensions (W x H x D): 110 mm x 100 mm x 75 mm`
+      },
+      {
+        source_id: "source_b",
+        source_type: "manufacturer_website",
+        format: "text",
+        raw_content: `Product page — siemens.com/simatic-s7-1200
+SIMATIC S7-1200, CPU 1214C
+
+Compact PLC for small to medium automation tasks.
+Input voltage: 24V DC
+Weight: 1.2 kg
+Operating temperature: -20C to 60C
+Protection class: IP20
+Digital I/O: 14 DI / 10 DO
+Ethernet interface: yes, PROFINET supported
+Memory: 100 KB work memory
+
+Buy now or find a distributor near you.`
+      },
+      {
+        source_id: "source_c",
+        source_type: "distributor_erp",
+        format: "csv",
+        raw_content: `sku,description,voltage,weight_kg,temp_range,protection,memory_kb
+6ES7214-1AG40-0XB0,SIMATIC S7-1200 CPU 1214C PLC,24VDC,1.4,-20 to 55 C,IP20,100`
+      }
+    ]);
+    setError(null);
+  };
+
   const handleOverlayClick = (e) => {
     if (e.target === overlayRef.current) onClose();
   };
@@ -115,11 +166,21 @@ export default function IngestModal({ onClose, onSuccess }) {
             <p className="eyebrow">New ingestion</p>
             <h2>Ingest product sources</h2>
           </div>
-          <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Close">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
+              onClick={handleLoadDemoData}
+              style={{ color: 'var(--teal)', border: '1px solid var(--teal-dim)' }}
+            >
+              📋 Load 3 Demo Sources
+            </button>
+            <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Close">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="ingest-form">
