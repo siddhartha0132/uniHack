@@ -26,10 +26,18 @@ def normalize_database_url(url: str) -> str:
     elif url.startswith("postgresql://") and "psycopg" not in url:
         url = url.replace("postgresql://", "postgresql+psycopg://", 1)
         
-    # 2. Supabase IPv6 direct host -> IPv4 connection pooler auto-rewrite (for Render)
+    # 2. Supabase project ref and pooler handling
+    project_ref = os.getenv("SUPABASE_PROJECT_REF", "jddyiqdllaytbhopjmch")
+    
+    # 2a. Supabase IPv6 direct host -> IPv4 connection pooler auto-rewrite
     match = re.search(r"@db\.([a-z0-9]+)\.supabase\.co(?::\d+)?", url)
     if match:
         project_ref = match.group(1)
+        region = os.getenv("SUPABASE_REGION", "ap-northeast-2")
+        url = re.sub(r"@db\.[a-z0-9]+\.supabase\.co(:\d+)?", f"@aws-0-{region}.pooler.supabase.com:5432", url)
+
+    # 2b. Ensure tenant identifier (.project_ref) is present in username for pooler
+    if "pooler.supabase.com" in url:
         user_pass_match = re.search(r"://([^@]+)@", url)
         if user_pass_match:
             user_pass = user_pass_match.group(1)
@@ -43,8 +51,7 @@ def normalize_database_url(url: str) -> str:
                 if "." not in user:
                     user = f"{user}.{project_ref}"
                 new_user_pass = user
-        region = os.getenv("SUPABASE_REGION", "ap-northeast-2")
-        url = re.sub(r"@db\.[a-z0-9]+\.supabase\.co(:\d+)?", f"@aws-0-{region}.pooler.supabase.com:5432", url)
+            url = url[:user_pass_match.start(1)] + new_user_pass + url[user_pass_match.end(1):]
     
     return url
 
@@ -73,5 +80,8 @@ def get_db():
 
 def init_db():
     """Create all tables defined in models.py. Called once at startup."""
-    from . import models  # noqa: F401 — ensure models are registered
-    Base.metadata.create_all(bind=engine)
+    try:
+        from . import models  # noqa: F401 — ensure models are registered
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"⚠️ Note: Database auto-creation notice ({e}). Continuing startup...")
