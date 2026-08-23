@@ -11,7 +11,7 @@ services:
       cd backend && ./start.sh
     envVars:
       - key: DATABASE_URL
-        value: postgresql://postgres.jddyiqdllaytbhopjmch:changeme@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
+        value: postgresql://postgres:aRESuRDyTWWpOCtn@db.jddyiqdllaytbhopjmch.supabase.co:5432/postgres
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: JWT_ALGORITHM
