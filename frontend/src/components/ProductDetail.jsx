@@ -144,18 +144,20 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
           onClick={onBack}
           style={{
             display: "inline-flex", alignItems: "center", gap: "6px",
-            background: "none", border: "none", cursor: "pointer",
-            color: "var(--text-secondary)", fontSize: "12.5px",
-            fontFamily: "var(--font-mono)", padding: "0", marginBottom: "18px",
-            transition: "color 0.15s"
+            background: "var(--panel)", border: "1px solid var(--border)",
+            borderRadius: "20px", cursor: "pointer",
+            color: "var(--text-primary)", fontSize: "12px",
+            fontFamily: "var(--font-mono)", fontWeight: 600,
+            padding: "6px 14px", marginBottom: "20px",
+            transition: "border-color 0.15s, color 0.15s"
           }}
-          onMouseEnter={e => e.currentTarget.style.color = "var(--teal)"}
-          onMouseLeave={e => e.currentTarget.style.color = "var(--text-secondary)"}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--teal)"; e.currentTarget.style.color = "var(--teal)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-primary)"; }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6"/>
           </svg>
-          Back to home
+          Back
         </button>
       )}
       <p className="eyebrow">{product.product_id}</p>
