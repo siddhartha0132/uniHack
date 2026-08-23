@@ -34,7 +34,7 @@ Your project: **`jddyiqdllaytbhopjmch`**
 
 | Variable | Value |
 |----------|-------|
-| `DATABASE_URL` | `postgresql://postgres:[DB_PASSWORD]@db.jddyiqdllaytbhopjmch.supabase.co:5432/postgres` |
+| `DATABASE_URL` | `postgresql://postgres.jddyiqdllaytbhopjmch:[DB_PASSWORD]@aws-0-ap-south-1.pooler.supabase.com:5432/postgres` |
 | `SUPABASE_URL` | `https://jddyiqdllaytbhopjmch.supabase.co` |
 | `SUPABASE_SERVICE_KEY` | `sb_secret_...` (from Supabase API settings) |
 | `JWT_SECRET_KEY` | Auto-generated (or `openssl rand -base64 32`) |
