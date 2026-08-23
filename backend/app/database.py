@@ -43,8 +43,8 @@ def normalize_database_url(url: str) -> str:
                 if "." not in user:
                     user = f"{user}.{project_ref}"
                 new_user_pass = user
-            url = url[:user_pass_match.start(1)] + new_user_pass + url[user_pass_match.end(1):]
-        url = re.sub(r"@db\.[a-z0-9]+\.supabase\.co(:\d+)?", "@aws-0-ap-south-1.pooler.supabase.com:5432", url)
+        region = os.getenv("SUPABASE_REGION", "ap-northeast-2")
+        url = re.sub(r"@db\.[a-z0-9]+\.supabase\.co(:\d+)?", f"@aws-0-{region}.pooler.supabase.com:5432", url)
     
     return url
 
