@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: veritas-backend
+    runtime: python
+    plan: starter
+    region: oregon
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r backend/requirements.txt
+    startCommand: |
+      cd backend && ./start.sh
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://postgres:@db.jddyiqdllaytbhopjmch.supabase.co:5432/postgres
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRE_MINUTES
+        value: "60"
+      - key: CORS_ORIGINS
+        value: https://veritas-frontend.vercel.app
+      - key: LOG_LEVEL
+        value: INFO
+      - key: SUPABASE_URL
+        value: https://jddyiqdllaytbhopjmch.supabase.co
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+    healthCheckPath: /api/health
+    autoDeploy: true
