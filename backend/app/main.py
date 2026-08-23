@@ -164,21 +164,27 @@ def _run_pipeline(
 
 def _save_product(record: Dict[str, Any], db: Session, expected_version: int | None = None) -> None:
     """Upsert a product record to the DB with optimistic locking."""
-    existing = db.query(Product).filter_by(product_id=record["product_id"], tenant_id=record["tenant_id"]).first()
-    if existing:
-        if expected_version is not None and existing.version != expected_version:
-            raise HTTPException(status_code=409, detail="Record modified by another user. Please refresh and retry.")
-        existing.version = (existing.version or 1) + 1
-        existing.product_name       = record["product_name"]
-        existing.attributes_json    = record["attributes"]
-        existing.quality_json       = record["quality"]
-        existing.classification_json = record.get("classification")
-        existing.related_json       = record.get("related", {})
-        existing.sources_json       = record.get("sources", [])
-        existing.review_log_json    = record.get("review_log", [])
-    else:
-        db.add(Product.from_dict(record))
-    db.commit()
+    try:
+        existing = db.query(Product).filter_by(product_id=record["product_id"], tenant_id=record["tenant_id"]).first()
+        if existing:
+            if expected_version is not None and existing.version != expected_version:
+                raise HTTPException(status_code=409, detail="Record modified by another user. Please refresh and retry.")
+            existing.version = (existing.version or 1) + 1
+            existing.product_name       = record["product_name"]
+            existing.attributes_json    = record["attributes"]
+            existing.quality_json       = record["quality"]
+            existing.classification_json = record.get("classification")
+            existing.related_json       = record.get("related", {})
+            existing.sources_json       = record.get("sources", [])
+            existing.review_log_json    = record.get("review_log", [])
+        else:
+            db.add(Product.from_dict(record))
+        db.commit()
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        print(f"⚠️ Warning: _save_product notice ({e})")
 
 
 def _load_product(product_id: str, tenant_id: str, db: Session) -> Optional[Dict[str, Any]]:

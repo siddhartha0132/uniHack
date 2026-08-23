@@ -20,16 +20,15 @@ from sqlalchemy.types import TypeDecorator
 from .database import Base
 
 
-class JSONColumn(TypeDecorator):
-    """Stores Python dicts/lists as JSON text. Works with both SQLite and Postgres."""
-    impl = Text
-    cache_ok = True
-
-    def process_bind_param(self, value, dialect):
-        return json.dumps(value) if value is not None else None
-
-    def process_result_value(self, value, dialect):
-        return json.loads(value) if value is not None else None
+def _ensure_dict(val, default=dict):
+    if val is None:
+        return default() if callable(default) else default
+    if isinstance(val, (dict, list)):
+        return val
+    try:
+        return json.loads(val)
+    except Exception:
+        return default() if callable(default) else default
 
 
 class Product(Base):
@@ -44,13 +43,13 @@ class Product(Base):
     tenant_id: Any    = Column(String, primary_key=True, index=True, default="tenant_demo")
     product_name: Any = Column(String, nullable=False)
 
-    # Full resolved pipeline output stored as JSON blobs
-    attributes_json: Any     = Column(JSONColumn, default=dict)
-    quality_json: Any        = Column(JSONColumn, default=dict)
-    classification_json: Any = Column(JSONColumn, nullable=True)
-    related_json: Any        = Column(JSONColumn, default=dict)
-    sources_json: Any        = Column(JSONColumn, default=list)
-    review_log_json: Any     = Column(JSONColumn, default=list)
+    # Full resolved pipeline output stored as native JSON/JSONB
+    attributes_json: Any     = Column(JSON, default=dict)
+    quality_json: Any        = Column(JSON, default=dict)
+    classification_json: Any = Column(JSON, nullable=True)
+    related_json: Any        = Column(JSON, default=dict)
+    sources_json: Any        = Column(JSON, default=list)
+    review_log_json: Any     = Column(JSON, default=list)
 
     created_at: Any  = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at: Any  = Column(DateTime, default=lambda: datetime.now(timezone.utc),
@@ -62,12 +61,12 @@ class Product(Base):
         return {
             "product_id":     self.product_id,
             "product_name":   self.product_name,
-            "attributes":     self.attributes_json or {},
-            "quality":        self.quality_json or {},
-            "classification": self.classification_json,
-            "related":        self.related_json or {},
-            "sources":        self.sources_json or [],
-            "review_log":     self.review_log_json or [],
+            "attributes":     _ensure_dict(self.attributes_json, dict),
+            "quality":        _ensure_dict(self.quality_json, dict),
+            "classification": _ensure_dict(self.classification_json, None),
+            "related":        _ensure_dict(self.related_json, dict),
+            "sources":        _ensure_dict(self.sources_json, list),
+            "review_log":     _ensure_dict(self.review_log_json, list),
             "version":        self.version,
             "tenant_id":      self.tenant_id,
         }
