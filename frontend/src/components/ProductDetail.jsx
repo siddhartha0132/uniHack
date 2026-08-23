@@ -24,7 +24,7 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
 
   if (!product) {
     return (
-      <div className="detail-panel">
+      <div className="detail-panel" style={{ padding: "36px 44px 56px" }}>
         <div style={{ maxWidth: "860px" }}>
 
         {/* Hero headline */}
