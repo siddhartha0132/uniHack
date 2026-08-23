@@ -1,36 +1,48 @@
 import { useState, useEffect } from "react";
 import { api } from "../api/client";
 
+const DEFAULT_PRIORS = {
+  datasheet: 0.95,
+  catalog_pdf: 0.85,
+  manufacturer_website: 0.80,
+  distributor_erp: 0.70,
+  image_label: 0.75,
+};
+
 export default function ReliabilityPanel() {
   const [data, setData] = useState(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (open && !data) {
-      const base = (
-        import.meta.env.VITE_API_BASE ||
-        import.meta.env.VITE_API_URL ||
-        "https://unihack-production-a139.up.railway.app"
-      ).replace(/\/+$/, "");
-      fetch(`${base}/api/reliability`)
-        .then((r) => r.json())
-        .then(setData)
-        .catch(() => {});
+      setLoading(true);
+      api
+        .getReliability()
+        .then((res) => {
+          if (res && res.static_priors) {
+            setData(res);
+          } else {
+            setData({ static_priors: DEFAULT_PRIORS, learned_weights: {} });
+          }
+        })
+        .catch(() => {
+          setData({ static_priors: DEFAULT_PRIORS, learned_weights: {} });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [open, data]);
 
-  const all = data
-    ? Object.entries({
-        ...data.static_priors,
-        ...Object.fromEntries(
-          Object.entries(data.learned_weights).map(([k, v]) => [k, v])
-        ),
-      }).map(([source_type, _]) => ({
-        source_type,
-        static: data.static_priors[source_type] ?? null,
-        learned: data.learned_weights[source_type] ?? null,
-      }))
-    : [];
+  const staticPriors = (data && data.static_priors) || DEFAULT_PRIORS;
+  const learnedWeights = (data && data.learned_weights) || {};
+
+  const all = Object.keys(staticPriors).map((source_type) => ({
+    source_type,
+    static: staticPriors[source_type] ?? null,
+    learned: learnedWeights[source_type] ?? null,
+  }));
 
   return (
     <div className="rel-panel card">
@@ -50,10 +62,10 @@ export default function ReliabilityPanel() {
       {open && (
         <div className="rel-body">
           <p className="rel-note">
-            Bayesian Beta distribution weights learned from approve/reject actions.
-            As you review more attributes, the weights drift from the static priors toward real observed accuracy.
+            Bayesian Beta distribution weights learned from human approve/edit/reject actions.
+            As you review attributes, source reliability dynamically adapts from static priors toward actual observed accuracy.
           </p>
-          {!data && <div className="skeleton" style={{ height: 80 }} />}
+          {loading && !data && <div className="skeleton" style={{ height: 80, borderRadius: "6px" }} />}
           {data && (
             <table className="rel-table">
               <thead>
@@ -72,7 +84,15 @@ export default function ReliabilityPanel() {
                       <td><code>{source_type}</code></td>
                       <td>{s !== null ? (s * 100).toFixed(0) + "%" : "—"}</td>
                       <td className="learned-cell">
-                        {l !== null ? (l * 100).toFixed(1) + "%" : <span className="text-faint">no data yet</span>}
+                        {l !== null ? (
+                          <span style={{ color: "var(--teal)", fontWeight: 600 }}>
+                            {(l * 100).toFixed(1)}%
+                          </span>
+                        ) : (
+                          <span className="text-faint" style={{ color: "var(--text-faint)" }}>
+                            no reviews yet
+                          </span>
+                        )}
                       </td>
                       <td>
                         {delta !== null ? (

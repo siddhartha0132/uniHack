@@ -67,5 +67,7 @@ export const api = {
     return fetch(`${API_BASE}/api/products/${encodeURIComponent(productId)}/export?format=${encodeURIComponent(format)}`, {
       headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     });
-  }
+  },
+
+  getReliability: () => request("/api/reliability"),
 };
