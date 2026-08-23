@@ -7,7 +7,7 @@ import ExportPanel from "./ExportPanel";
 import ReliabilityPanel from "./ReliabilityPanel";
 import AuditTimeline from "./AuditTimeline";
 
-export default function ProductDetail({ product, onReview, loading }) {
+export default function ProductDetail({ product, onReview, loading, onOpenIngest, onRunDemo }) {
   if (loading) {
     return (
       <div className="detail-panel">
@@ -31,13 +31,28 @@ export default function ProductDetail({ product, onReview, loading }) {
               <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
             </svg>
           </div>
-          <p className="eyebrow" style={{ textAlign: "center", margin: 0 }}>no product selected</p>
+          <p className="eyebrow" style={{ textAlign: "center", margin: 0 }}>Getting Started</p>
           <h1 style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 700, textAlign: "center", margin: "8px 0 14px" }}>
-            Select a product or run the demo
+            Select a product or Click Enter Demo Data
           </h1>
-          <p style={{ fontSize: 14, color: "var(--text-secondary)", textAlign: "center", lineHeight: 1.75, maxWidth: 520, margin: "0 auto", textWrap: "balance" }}>
-            The demo dataset is a Siemens PLC SKU sourced from three genuinely disagreeing sources — a technical datasheet, a manufacturer product page, and a distributor ERP export. Watch the arbitration engine resolve conflicts with full evidence.
+          <p style={{ fontSize: 14, color: "var(--text-primary)", textAlign: "center", lineHeight: 1.6, maxWidth: 540, margin: "0 auto 10px", textWrap: "balance" }}>
+            Click on <strong>"Enter Demo Data"</strong> in the top navigation bar to upload your source files or load the 3 sample sources.
           </p>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", textAlign: "center", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 20px", textWrap: "balance" }}>
+            The demo dataset features a Siemens PLC SKU sourced from three genuinely conflicting sources — a technical datasheet, a manufacturer product page, and a distributor ERP export. Watch the Veritas engine arbitrate conflicts with full traceable evidence.
+          </p>
+          {onOpenIngest && (
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+              <button className="btn btn-primary btn-sm" onClick={onOpenIngest}>
+                📋 Enter Demo Data
+              </button>
+              {onRunDemo && (
+                <button className="btn btn-ghost btn-sm" onClick={onRunDemo} style={{ border: "1px solid var(--border)" }}>
+                  ⚡ Run Demo Pipeline
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

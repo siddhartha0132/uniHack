@@ -132,6 +132,8 @@ function AppInner() {
           product={product}
           loading={productLoading}
           onReview={handleReview}
+          onOpenIngest={() => setShowIngest(true)}
+          onRunDemo={handleRunDemo}
         />
       </div>
 
