@@ -4,7 +4,7 @@ import { api } from "../api/client";
 const INITIAL_SOURCE = {
   source_id: "source_1",
   source_type: "",
-  format: "text",
+  format: "",
   raw_content: "",
   file: null,
   fileName: "",
@@ -41,6 +41,10 @@ export default function IngestModal({ onClose, onSuccess }) {
     let detectedFormat = "text";
     if (name.endsWith(".csv")) {
       detectedFormat = "csv";
+    } else if (name.endsWith(".pdf")) {
+      detectedFormat = "pdf";
+    } else if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg")) {
+      detectedFormat = "image";
     }
 
     // 2. Auto-suggest source type if not already picked
@@ -104,7 +108,7 @@ export default function IngestModal({ onClose, onSuccess }) {
       {
         source_id: `source_${prev.length + 1}`,
         source_type: "",
-        format: "text",
+        format: "",
         raw_content: "",
         file: null,
         fileName: "",
@@ -328,8 +332,11 @@ Buy now or find a distributor near you.`,
                     onChange={(e) => updateSource(i, "format", e.target.value)}
                     title="Auto-detected format"
                   >
-                    <option value="text">text</option>
-                    <option value="csv">csv</option>
+                    <option value="">-- File Type --</option>
+                    <option value="text">TXT / Text</option>
+                    <option value="csv">CSV</option>
+                    <option value="pdf">PDF</option>
+                    <option value="image">Image</option>
                   </select>
 
                   {sources.length > 1 && (
@@ -398,7 +405,7 @@ Buy now or find a distributor near you.`,
         </form>
 
         <style>{`
-          .ingest-modal { position: relative; max-width: 640px; }
+          .ingest-modal { position: relative; max-width: 660px; }
           .modal-header {
             display: flex;
             align-items: flex-start;
@@ -433,7 +440,7 @@ Buy now or find a distributor near you.`,
           }
           .source-card-header {
             display: grid;
-            grid-template-columns: 1.4fr 1.3fr 75px auto;
+            grid-template-columns: 1.4fr 1.3fr 100px auto;
             gap: 8px;
             align-items: center;
           }
