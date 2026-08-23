@@ -80,11 +80,34 @@ class Base(DeclarativeBase):
 
 def get_db():
     """FastAPI dependency: yields a DB session, ensures it's closed after use."""
-    db = SessionLocal()
+    db = None
     try:
+        db = SessionLocal()
+        # Probe connection
+        db.connection()
         yield db
+    except Exception as e:
+        print(f"⚠️ Primary DB connection error: {e}. Falling back to SQLite.")
+        if db:
+            try:
+                db.close()
+            except Exception:
+                pass
+        fallback_engine = create_engine("sqlite:///./veritas.db", connect_args={"check_same_thread": False})
+        from . import models  # noqa: F401
+        Base.metadata.create_all(bind=fallback_engine)
+        FallbackSession = sessionmaker(autocommit=False, autoflush=False, bind=fallback_engine)
+        db = FallbackSession()
+        try:
+            yield db
+        finally:
+            db.close()
     finally:
-        db.close()
+        if db:
+            try:
+                db.close()
+            except Exception:
+                pass
 
 
 def init_db():
