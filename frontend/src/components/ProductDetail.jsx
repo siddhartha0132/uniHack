@@ -7,7 +7,7 @@ import ExportPanel from "./ExportPanel";
 import ReliabilityPanel from "./ReliabilityPanel";
 import AuditTimeline from "./AuditTimeline";
 
-export default function ProductDetail({ product, onReview, loading, onOpenIngest, onRunDemo }) {
+export default function ProductDetail({ product, onReview, loading, onOpenIngest, onRunDemo, onBack }) {
   if (loading) {
     return (
       <div className="detail-panel">
@@ -139,6 +139,25 @@ export default function ProductDetail({ product, onReview, loading, onOpenIngest
 
   return (
     <div className="detail-panel">
+      {onBack && (
+        <button
+          onClick={onBack}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: "6px",
+            background: "none", border: "none", cursor: "pointer",
+            color: "var(--text-secondary)", fontSize: "12.5px",
+            fontFamily: "var(--font-mono)", padding: "0", marginBottom: "18px",
+            transition: "color 0.15s"
+          }}
+          onMouseEnter={e => e.currentTarget.style.color = "var(--teal)"}
+          onMouseLeave={e => e.currentTarget.style.color = "var(--text-secondary)"}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to home
+        </button>
+      )}
       <p className="eyebrow">{product.product_id}</p>
       <h1 className="detail-title">{product.product_name}</h1>
 

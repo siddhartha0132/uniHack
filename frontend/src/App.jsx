@@ -19,7 +19,7 @@ function AppInner() {
   const [showLanding, setShowLanding] = useState(true);
 
   const { products, loading: productsLoading, refresh: refreshProducts } = useProducts();
-  const { product, loading: productLoading, load: loadProduct, review } = useProduct();
+  const { product, loading: productLoading, load: loadProduct, setProduct, review } = useProduct();
 
   // Check API health on mount
   useEffect(() => {
@@ -134,6 +134,7 @@ function AppInner() {
           onReview={handleReview}
           onOpenIngest={() => setShowIngest(true)}
           onRunDemo={handleRunDemo}
+          onBack={() => setProduct(null)}
         />
       </div>
 
