@@ -3,7 +3,7 @@ import { api } from "../api/client";
 
 const INITIAL_SOURCE = {
   source_id: "source_1",
-  source_type: "datasheet",
+  source_type: "",
   format: "text",
   raw_content: "",
   file: null,
@@ -11,11 +11,11 @@ const INITIAL_SOURCE = {
 };
 
 const SOURCE_TYPES = [
-  "datasheet",
-  "manufacturer_website",
-  "distributor_erp",
-  "catalog_pdf",
-  "image_label",
+  { value: "datasheet", label: "Datasheet" },
+  { value: "manufacturer_website", label: "Manufacturer Website" },
+  { value: "distributor_erp", label: "Distributor ERP" },
+  { value: "catalog_pdf", label: "Catalog PDF" },
+  { value: "image_label", label: "Image / Label" },
 ];
 
 export default function IngestModal({ onClose, onSuccess }) {
@@ -35,9 +35,28 @@ export default function IngestModal({ onClose, onSuccess }) {
 
   const handleFileSelect = (i, file) => {
     if (!file) return;
+    const name = file.name.toLowerCase();
+
+    // 1. Auto-detect format from file
+    let detectedFormat = "text";
+    if (name.endsWith(".csv")) {
+      detectedFormat = "csv";
+    }
+
+    // 2. Auto-suggest source type if not already picked
+    let autoType = sources[i].source_type;
+    if (!autoType) {
+      if (name.includes("datasheet")) autoType = "datasheet";
+      else if (name.includes("website") || name.includes("product")) autoType = "manufacturer_website";
+      else if (name.includes("erp") || name.includes("distributor")) autoType = "distributor_erp";
+      else if (name.includes("catalog") || name.endsWith(".pdf")) autoType = "catalog_pdf";
+      else if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg")) autoType = "image_label";
+    }
+
     const isTextOrCsv =
-      file.name.endsWith(".txt") ||
-      file.name.endsWith(".csv") ||
+      name.endsWith(".txt") ||
+      name.endsWith(".csv") ||
+      name.endsWith(".json") ||
       file.type.startsWith("text/");
 
     if (isTextOrCsv) {
@@ -48,9 +67,11 @@ export default function IngestModal({ onClose, onSuccess }) {
             idx === i
               ? {
                   ...s,
+                  source_id: file.name.replace(/\.[^/.]+$/, "") || `source_${i + 1}`,
                   file: file,
                   fileName: file.name,
-                  format: file.name.endsWith(".csv") ? "csv" : "text",
+                  format: detectedFormat,
+                  source_type: autoType || s.source_type,
                   raw_content: e.target.result,
                 }
               : s
@@ -64,8 +85,11 @@ export default function IngestModal({ onClose, onSuccess }) {
           idx === i
             ? {
                 ...s,
+                source_id: file.name.replace(/\.[^/.]+$/, "") || `source_${i + 1}`,
                 file: file,
                 fileName: file.name,
+                format: detectedFormat,
+                source_type: autoType || s.source_type,
                 raw_content: s.raw_content || `[Attached file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)]`,
               }
             : s
@@ -79,7 +103,7 @@ export default function IngestModal({ onClose, onSuccess }) {
       ...prev,
       {
         source_id: `source_${prev.length + 1}`,
-        source_type: "datasheet",
+        source_type: "",
         format: "text",
         raw_content: "",
         file: null,
@@ -102,7 +126,7 @@ export default function IngestModal({ onClose, onSuccess }) {
     const hasFiles = sources.some((s) => s.file);
     for (const s of sources) {
       if (!s.file && !s.raw_content.trim()) {
-        setError(`Source "${s.source_id}" has no content or file selected.`);
+        setError(`Please choose a file or paste content for source ${s.fileName || s.source_id}.`);
         return;
       }
     }
@@ -115,15 +139,15 @@ export default function IngestModal({ onClose, onSuccess }) {
         formData.append("product_name", productName.trim());
         formData.append("product_id", productId.trim());
         sources.forEach((s) => {
-          formData.append("source_ids", s.source_id);
-          formData.append("source_types", s.source_type);
+          formData.append("source_ids", s.source_id || "source");
+          formData.append("source_types", s.source_type || "datasheet");
           if (s.file) {
             formData.append("files", s.file);
           } else {
             const blob = new Blob([s.raw_content], {
               type: s.format === "csv" ? "text/csv" : "text/plain",
             });
-            formData.append("files", blob, `${s.source_id}.${s.format === "csv" ? "csv" : "txt"}`);
+            formData.append("files", blob, `${s.source_id || "source"}.${s.format === "csv" ? "csv" : "txt"}`);
           }
         });
         result = await api.ingestUpload(formData);
@@ -132,9 +156,9 @@ export default function IngestModal({ onClose, onSuccess }) {
           product_name: productName.trim(),
           product_id: productId.trim(),
           sources: sources.map((s) => ({
-            source_id: s.source_id,
-            source_type: s.source_type,
-            format: s.format,
+            source_id: s.source_id || "source",
+            source_type: s.source_type || "datasheet",
+            format: s.format || "text",
             raw_content: s.raw_content,
           })),
         });
@@ -153,7 +177,7 @@ export default function IngestModal({ onClose, onSuccess }) {
     setProductId("6ES7214-1AG40-0XB0");
     setSources([
       {
-        source_id: "source_a",
+        source_id: "source_a_datasheet",
         source_type: "datasheet",
         format: "text",
         raw_content: `SIEMENS SIMATIC S7-1200 CPU 1214C
@@ -173,7 +197,7 @@ Dimensions (W x H x D): 110 mm x 100 mm x 75 mm`,
         fileName: "source_a_datasheet.txt",
       },
       {
-        source_id: "source_b",
+        source_id: "source_b_website",
         source_type: "manufacturer_website",
         format: "text",
         raw_content: `Product page — siemens.com/simatic-s7-1200
@@ -193,7 +217,7 @@ Buy now or find a distributor near you.`,
         fileName: "source_b_website.txt",
       },
       {
-        source_id: "source_c",
+        source_id: "source_c_distributor_erp",
         source_type: "distributor_erp",
         format: "csv",
         raw_content: `sku,description,voltage,weight_kg,temp_range,protection,memory_kb
@@ -214,7 +238,7 @@ Buy now or find a distributor near you.`,
       <div className="modal-box ingest-modal">
         <div className="modal-header">
           <div>
-            <p className="eyebrow">Product Input</p>
+            <p className="eyebrow">Product Ingestion</p>
             <h2>Enter Demo Data / Sources</h2>
           </div>
           <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="Close">
@@ -249,9 +273,9 @@ Buy now or find a distributor near you.`,
 
           <hr className="divider" />
 
-          {/* Sources Header */}
+          {/* Sources list */}
           <div className="sources-head">
-            <span className="form-label">Sources ({sources.length})</span>
+            <span className="form-label">Attached Sources ({sources.length})</span>
             <button type="button" className="btn btn-ghost btn-sm" onClick={addSource}>
               + Add Source
             </button>
@@ -261,47 +285,52 @@ Buy now or find a distributor near you.`,
             {sources.map((src, i) => (
               <div key={i} className="source-card">
                 <div className="source-card-header">
-                  <input
-                    className="input source-id-input"
-                    value={src.source_id}
-                    onChange={(e) => updateSource(i, "source_id", e.target.value)}
-                    placeholder="source_id"
-                  />
+                  {/* File Selector */}
+                  <div className="file-pick-container">
+                    <input
+                      type="file"
+                      ref={(el) => (fileInputRefs.current[i] = el)}
+                      style={{ display: "none" }}
+                      accept=".pdf,.txt,.csv,.jpg,.jpeg,.png,.json"
+                      onChange={(e) => handleFileSelect(i, e.target.files[0])}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-ghost file-choose-btn"
+                      onClick={() => fileInputRefs.current[i]?.click()}
+                      title="Select file from your computer"
+                    >
+                      📁 {src.fileName ? "Change" : "Choose File"}
+                    </button>
+                    <span className={`file-name-label ${src.fileName ? "has-file" : ""}`}>
+                      {src.fileName || "No file chosen"}
+                    </span>
+                  </div>
+
+                  {/* Source Type Dropdown */}
                   <select
-                    className="input"
+                    className="input source-type-select"
                     value={src.source_type}
                     onChange={(e) => updateSource(i, "source_type", e.target.value)}
                   >
+                    <option value="">-- Choose Type --</option>
                     {SOURCE_TYPES.map((t) => (
-                      <option key={t} value={t}>{t}</option>
+                      <option key={t.value} value={t.value}>
+                        {t.label}
+                      </option>
                     ))}
                   </select>
+
+                  {/* Format Indicator/Select */}
                   <select
-                    className="input"
+                    className="input format-select"
                     value={src.format}
                     onChange={(e) => updateSource(i, "format", e.target.value)}
+                    title="Auto-detected format"
                   >
                     <option value="text">text</option>
                     <option value="csv">csv</option>
                   </select>
-
-                  {/* Hidden file input + Choose File Button */}
-                  <input
-                    type="file"
-                    ref={(el) => (fileInputRefs.current[i] = el)}
-                    style={{ display: "none" }}
-                    accept=".pdf,.txt,.csv,.jpg,.jpeg,.png,.json"
-                    onChange={(e) => handleFileSelect(i, e.target.files[0])}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => fileInputRefs.current[i]?.click()}
-                    title="Select file from your computer"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    📁 {src.fileName ? src.fileName.slice(0, 14) + "…" : "Choose File"}
-                  </button>
 
                   {sources.length > 1 && (
                     <button
@@ -369,12 +398,12 @@ Buy now or find a distributor near you.`,
         </form>
 
         <style>{`
-          .ingest-modal { position: relative; }
+          .ingest-modal { position: relative; max-width: 640px; }
           .modal-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
           }
           .ingest-form { display: flex; flex-direction: column; gap: 16px; }
           .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -396,7 +425,7 @@ Buy now or find a distributor near you.`,
           .source-card {
             border: 1px solid var(--border-soft);
             border-radius: var(--radius);
-            padding: 14px;
+            padding: 12px;
             background: var(--bg-subtle);
             display: flex;
             flex-direction: column;
@@ -404,12 +433,43 @@ Buy now or find a distributor near you.`,
           }
           .source-card-header {
             display: grid;
-            grid-template-columns: 1fr 1.2fr 80px auto auto;
+            grid-template-columns: 1.4fr 1.3fr 75px auto;
             gap: 8px;
             align-items: center;
           }
-          .source-id-input { font-family: var(--font-mono); font-size: 12px; }
-          .source-content { min-height: 100px; font-size: 12px; }
+          .file-pick-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 2px 8px;
+            min-height: 34px;
+            overflow: hidden;
+          }
+          .file-choose-btn {
+            border: 1px solid var(--border-soft) !important;
+            padding: 3px 8px !important;
+            font-size: 11px !important;
+            white-space: nowrap;
+            flex-shrink: 0;
+          }
+          .file-name-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-faint);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .file-name-label.has-file {
+            color: var(--teal);
+            font-weight: 600;
+          }
+          .source-type-select { font-size: 12px; }
+          .format-select { font-size: 12px; }
+          .source-content { min-height: 90px; font-size: 12px; font-family: var(--font-mono); }
           .ingest-error {
             padding: 10px 14px;
             border: 1px solid var(--red-dim);
