@@ -15,7 +15,6 @@ sqlalchemy==2.0.31
 alembic==1.13.2
 PyJWT==2.8.0
 psycopg[binary]==3.2.13
-psycopg2-binary==2.9.9
 
 # Supabase
 supabase==2.10.0
