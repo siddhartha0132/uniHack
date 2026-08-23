@@ -6,6 +6,8 @@ const INITIAL_SOURCE = {
   source_type: "datasheet",
   format: "text",
   raw_content: "",
+  file: null,
+  fileName: "",
 };
 
 const SOURCE_TYPES = [
@@ -23,11 +25,53 @@ export default function IngestModal({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const overlayRef = useRef(null);
+  const fileInputRefs = useRef({});
 
   const updateSource = (i, field, value) => {
     setSources((prev) =>
       prev.map((s, idx) => (idx === i ? { ...s, [field]: value } : s))
     );
+  };
+
+  const handleFileSelect = (i, file) => {
+    if (!file) return;
+    const isTextOrCsv =
+      file.name.endsWith(".txt") ||
+      file.name.endsWith(".csv") ||
+      file.type.startsWith("text/");
+
+    if (isTextOrCsv) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSources((prev) =>
+          prev.map((s, idx) =>
+            idx === i
+              ? {
+                  ...s,
+                  file: file,
+                  fileName: file.name,
+                  format: file.name.endsWith(".csv") ? "csv" : "text",
+                  raw_content: e.target.result,
+                }
+              : s
+          )
+        );
+      };
+      reader.readAsText(file);
+    } else {
+      setSources((prev) =>
+        prev.map((s, idx) =>
+          idx === i
+            ? {
+                ...s,
+                file: file,
+                fileName: file.name,
+                raw_content: s.raw_content || `[Attached file: ${file.name} (${(file.size / 1024).toFixed(1)} KB)]`,
+              }
+            : s
+        )
+      );
+    }
   };
 
   const addSource = () => {
@@ -38,6 +82,8 @@ export default function IngestModal({ onClose, onSuccess }) {
         source_type: "datasheet",
         format: "text",
         raw_content: "",
+        file: null,
+        fileName: "",
       },
     ]);
   };
@@ -53,25 +99,46 @@ export default function IngestModal({ onClose, onSuccess }) {
       setError("Product name and ID are required.");
       return;
     }
+    const hasFiles = sources.some((s) => s.file);
     for (const s of sources) {
-      if (!s.raw_content.trim()) {
-        setError(`Source "${s.source_id}" has no content.`);
+      if (!s.file && !s.raw_content.trim()) {
+        setError(`Source "${s.source_id}" has no content or file selected.`);
         return;
       }
     }
     setError(null);
     setLoading(true);
     try {
-      const result = await api.ingest({
-        product_name: productName.trim(),
-        product_id: productId.trim(),
-        sources: sources.map((s) => ({
-          source_id: s.source_id,
-          source_type: s.source_type,
-          format: s.format,
-          raw_content: s.raw_content,
-        })),
-      });
+      let result;
+      if (hasFiles) {
+        const formData = new FormData();
+        formData.append("product_name", productName.trim());
+        formData.append("product_id", productId.trim());
+        sources.forEach((s) => {
+          formData.append("source_ids", s.source_id);
+          formData.append("source_types", s.source_type);
+          if (s.file) {
+            formData.append("files", s.file);
+          } else {
+            const blob = new Blob([s.raw_content], {
+              type: s.format === "csv" ? "text/csv" : "text/plain",
+            });
+            formData.append("files", blob, `${s.source_id}.${s.format === "csv" ? "csv" : "txt"}`);
+          }
+        });
+        result = await api.ingestUpload(formData);
+      } else {
+        result = await api.ingest({
+          product_name: productName.trim(),
+          product_id: productId.trim(),
+          sources: sources.map((s) => ({
+            source_id: s.source_id,
+            source_type: s.source_type,
+            format: s.format,
+            raw_content: s.raw_content,
+          })),
+        });
+      }
       onSuccess(result);
       onClose();
     } catch (e) {
@@ -101,7 +168,9 @@ Ambient temperature during operation: -20 C to +60 C
 Degree of protection: IP20
 Work memory: 100 KB
 Communication: PROFINET, Ethernet
-Dimensions (W x H x D): 110 mm x 100 mm x 75 mm`
+Dimensions (W x H x D): 110 mm x 100 mm x 75 mm`,
+        file: null,
+        fileName: "source_a_datasheet.txt",
       },
       {
         source_id: "source_b",
@@ -119,15 +188,19 @@ Digital I/O: 14 DI / 10 DO
 Ethernet interface: yes, PROFINET supported
 Memory: 100 KB work memory
 
-Buy now or find a distributor near you.`
+Buy now or find a distributor near you.`,
+        file: null,
+        fileName: "source_b_website.txt",
       },
       {
         source_id: "source_c",
         source_type: "distributor_erp",
         format: "csv",
         raw_content: `sku,description,voltage,weight_kg,temp_range,protection,memory_kb
-6ES7214-1AG40-0XB0,SIMATIC S7-1200 CPU 1214C PLC,24VDC,1.4,-20 to 55 C,IP20,100`
-      }
+6ES7214-1AG40-0XB0,SIMATIC S7-1200 CPU 1214C PLC,24VDC,1.4,-20 to 55 C,IP20,100`,
+        file: null,
+        fileName: "source_c_distributor_erp.csv",
+      },
     ]);
     setError(null);
   };
@@ -176,11 +249,11 @@ Buy now or find a distributor near you.`
 
           <hr className="divider" />
 
-          {/* Sources */}
+          {/* Sources Header */}
           <div className="sources-head">
             <span className="form-label">Sources ({sources.length})</span>
             <button type="button" className="btn btn-ghost btn-sm" onClick={addSource}>
-              + Add source
+              + Add Source
             </button>
           </div>
 
@@ -211,6 +284,25 @@ Buy now or find a distributor near you.`
                     <option value="text">text</option>
                     <option value="csv">csv</option>
                   </select>
+
+                  {/* Hidden file input + Choose File Button */}
+                  <input
+                    type="file"
+                    ref={(el) => (fileInputRefs.current[i] = el)}
+                    style={{ display: "none" }}
+                    accept=".pdf,.txt,.csv,.jpg,.jpeg,.png,.json"
+                    onChange={(e) => handleFileSelect(i, e.target.files[0])}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={() => fileInputRefs.current[i]?.click()}
+                    title="Select file from your computer"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    📁 {src.fileName ? src.fileName.slice(0, 14) + "…" : "Choose File"}
+                  </button>
+
                   {sources.length > 1 && (
                     <button
                       type="button"
@@ -224,12 +316,13 @@ Buy now or find a distributor near you.`
                     </button>
                   )}
                 </div>
+
                 <textarea
                   className="input source-content"
                   placeholder={
                     src.format === "csv"
                       ? "attribute,value\nvoltage,24V DC\nweight_kg,1.35"
-                      : "Paste raw text from datasheet, product page, etc."
+                      : "Paste raw text or select a file (.pdf, .txt, .csv, image) above."
                   }
                   value={src.raw_content}
                   onChange={(e) => updateSource(i, "raw_content", e.target.value)}
@@ -241,14 +334,24 @@ Buy now or find a distributor near you.`
           {error && <div className="ingest-error">{error}</div>}
 
           <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={handleLoadDemoData}
-              style={{ marginRight: 'auto', color: 'var(--teal)', border: '1px solid var(--teal-dim)' }}
-            >
-              📋 Load Demo Sources
-            </button>
+            <div style={{ display: "flex", gap: "8px", marginRight: "auto" }}>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={addSource}
+                style={{ border: "1px solid var(--border)" }}
+              >
+                + Add Source
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={handleLoadDemoData}
+                style={{ color: "var(--teal)", border: "1px solid var(--teal-dim)" }}
+              >
+                📋 Load Demo Sources
+              </button>
+            </div>
             <button type="button" className="btn btn-ghost" onClick={onClose} disabled={loading}>
               Cancel
             </button>
@@ -301,7 +404,7 @@ Buy now or find a distributor near you.`
           }
           .source-card-header {
             display: grid;
-            grid-template-columns: 1fr 1fr 80px auto;
+            grid-template-columns: 1fr 1.2fr 80px auto auto;
             gap: 8px;
             align-items: center;
           }
@@ -318,9 +421,11 @@ Buy now or find a distributor near you.`
           .modal-footer {
             display: flex;
             justify-content: flex-end;
+            align-items: center;
             gap: 10px;
-            padding-top: 8px;
+            padding-top: 12px;
             border-top: 1px solid var(--border-soft);
+            flex-wrap: wrap;
           }
           .spinner {
             display: inline-block;
@@ -330,7 +435,7 @@ Buy now or find a distributor near you.`
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
           }
-          @media (max-width: 540px) {
+          @media (max-width: 600px) {
             .form-row-2 { grid-template-columns: 1fr; }
             .source-card-header { grid-template-columns: 1fr 1fr; }
           }
