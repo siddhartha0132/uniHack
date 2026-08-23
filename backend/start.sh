@@ -5,9 +5,9 @@ set -e
 
 echo "🚀 Starting Veritas Backend..."
 
-# Run database migrations (from backend directory)
+# Render's working directory is the repo root
+# Run database migrations
 echo "📦 Running database migrations..."
-cd backend
 alembic upgrade head
 
 # Start the application
