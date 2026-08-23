@@ -6,9 +6,15 @@ services:
     region: oregon
     buildCommand: |
       pip install --upgrade pip uv
-      uv pip install --python $(which python) --only-binary=:all: --no-build-isolation -r backend/requirements.txt || pip install --only-binary=:all: -r backend/requirements.txt
+      uv python install 3.12
+      cd backend
+      uv venv --python 3.12 .venv
+      source .venv/bin/activate
+      uv pip install -r requirements.txt
     startCommand: |
-      cd backend && ./start.sh
+      cd backend
+      source .venv/bin/activate
+      exec uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
         value: postgresql://postgres:aRESuRDyTWWpOCtn@db.jddyiqdllaytbhopjmch.supabase.co:5432/postgres
